@@ -1,0 +1,201 @@
+<div class="header">
+
+     <div class="container">
+         <div class="row">
+             <div class="col-xs-12 text-center">
+                 <h1 class="header-heading">
+                     Cash Back On Every Deal
+                     <small>Get a great mortgage rate, plus cash back</small>
+                 </h1>
+             </div>
+         </div>
+     </div>
+
+     <div class="application-box">
+         <div class="row">
+             <div class="col-xs-12 text-center">
+                 <h2 class="aleoFont">Start Your Application</h2>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-md-8 col-md-offset-2">
+                 <div class="form-group">
+                     <input class="form-control text-center input-lg form-control-sma"
+                            ng-model="amount"
+                            ng-currency
+                            ng-limitations
+                            placeholder="Mortgage Amount"/>
+                 </div>
+             </div>
+             <div class="row">
+                 <div class="col-md-4 mar-xs">
+                     <div class="btn-drop">
+                         <button class="clearfix"
+                                 ng-click="togleDrop=!togleDrop">
+                             <span class="selected pull-left text-left">{{getMortage('period')}}</span>
+                             <span class="arrow pull-right"><i class="fa fa-chevron-down"></i></span>
+                         </button>
+                         <div class="placehold"
+                              ng-show="togleDrop"
+                              ng-click="togleDrop=!togleDrop"></div>
+                         <div class="meni-arrow"
+                              ng-show="togleDrop"></div>
+                         <ul class="list-unstyled"
+                             ng-show="togleDrop">
+                             <li  ng-click="togleDrop=!togleDrop; setMortage('period', '1 Year Term')">1 Year Term</li>
+                             <li  ng-click="togleDrop=!togleDrop; setMortage('period', '2 Year Term')">2 Year Term</li>
+                             <li  ng-click="togleDrop=!togleDrop; setMortage('period', '3 Year Term')">3 Year Term</li>
+                             <li  ng-click="togleDrop=!togleDrop; setMortage('period', '4 Year Term')">4 Year Term</li>
+                             <li  ng-click="togleDrop=!togleDrop; setMortage('period', '5 Year Term')">5 Year Term</li>
+                             <li  ng-click="togleDrop=!togleDrop; setMortage('period', '7 Year Term')">7 Year Term</li>
+                             <li  ng-click="togleDrop=!togleDrop; setMortage('period', '10 Year Term')">10 Year Term</li>
+                         </ul>
+                     </div>
+                 </div>
+                 <div class="col-md-4 mar-xs">
+                     <div class="btn-drop">
+                         <button class="clearfix"
+                                 ng-click="togleDrop2=!togleDrop2">
+                             <span class="selected pull-left text-left">{{getMortage('type')}}</span>
+                             <span class="arrow pull-right"><i class="fa fa-chevron-down"></i></span>
+                         </button>
+                         <div class="placehold"
+                              ng-show="togleDrop2"
+                              ng-click="togleDrop2=!togleDrop2"></div>
+                         <div class="meni-arrow"
+                              ng-show="togleDrop2"></div>
+                         <ul class="list-unstyled"
+                             ng-show="togleDrop2">
+                             <li  ng-click="togleDrop2=!togleDrop2; setMortage('type', 'Fixed')">Fixed</li>
+                             <li  ng-click="togleDrop2=!togleDrop2; setMortage('type', 'Variable')">Variable</li>
+                         </ul>
+                     </div>
+                 </div>
+                 <div class="col-md-4 mar-xs">
+                     <div class="form-group text-center">
+                         <div class="blue-box">Mortgage Rate: {{getRate()}}</div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="row text-center special-margin">
+             <div class="col-md-12 text-center">
+                 <i class="fa fa-check text-success bigF"
+                    ng-show="amount.length > 1"></i>
+                 <h1 class="morgage-sum">
+                     {{getMortage('rebate') | noFractionCurrency}}
+                     <small>
+                         <strong>Cash Back<br/>
+                         <span style="font-size: 14px; color:#5fd879;">No Strings Attached</span>
+                         </strong>
+                     </small>
+                 </h1>
+                 <button class="btn btn-success btn-lg mar-xs-top"
+                         ng-click="next('apply-now')"><span class="pull-left margin-top-small">Continue</span> <i class="fa fa-angle-right fa-2x pull-right"></i> </button>
+             </div>
+         </div>
+     </div>
+
+</div>
+
+<div class="lenders"></div>
+
+<div class="gray-back-b clearfix">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 text-center-sm text-center-xs special-margin">
+                <h2 class="aleoFont whiteText text-center">Why Do your Own Mortgage?</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-md-offset-1 text-center-xs text-center-sm">
+                <div class="min-height-100">
+                    <img src="resources/img/clock.png" />
+                </div>
+                <h3 class="aleoFont whiteTex">Your Mortgage on Your Time</h3>
+                <p class="whiteTex">Fill out our easy to complete mortgage application from the comfort of your home, office or smartphone, in as little as 10 minutes.</p>
+            </div>
+            <div class="col-md-3 col-md-offset-1  text-center-xs text-center-sm">
+                <div class="min-height-100">
+                    <img src="resources/img/credit-card.png" />
+                </div>
+                <h3 class="aleoFont whiteTex">Cash Back on Closing</h3>
+                <p class="whiteTex">Get Cash back on all of our mortgage products.
+                    Use your cash back to help cover closing costs, buy furniture or take a vacation. Your cash back, your choices!</p>
+            </div>
+            <div class="col-md-3 col-md-offset-1  text-center-xs text-center-sm">
+                <div class="min-height-100">
+                    <img src="resources/img/lock.png" />
+                </div>
+                <h3 class="aleoFont whiteTex">Private and Secure</h3>
+                <p class="whiteTex">Step-by-step instructions
+                    on everything you need to finish your mortgage application. We use a 256-Bit encryption and SSL to ensure your information is secure and protected.
+                    Our agents will not share your information with any individuals that are not pertinent to the approval of your mortgage.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="blue-back clearfix">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 col-md-offset-2 text-center-sm text-center-xs text-right">
+                <h2 class="aleoFont">Start Your Mortgage Today</h2>
+            </div>
+            <div class="col-md-2 text-center-sm text-center-xs">
+                <button class="btn btn-custom btn-success micro-margin btn-lg"
+                        scroll-animate="blink"
+                        ng-click="next('apply-now')">apply now <i class="fa fa-arrow-circle-right"></i> </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container special-margin-container">
+    <div class="row">
+        <div class="col-xs-12 text-center special-margin">
+            <h1 class="aleoFont bigF">How it Works</h1>
+        </div>
+    </div>
+    <div class="row  special-margin">
+        <div class="col-md-6 text-center-sm text-center-xs"
+             scroll-animate="floating">
+            <img src="resources/img/feature.png" class="img-responsive"/>
+        </div>
+        <div class="col-md-4 col-md-offset-1 text-center-sm text-center-xs"
+             scroll-animate="floating2">
+            <h2>Submit Your Application</h2>
+            <p class="text-muted">Take less than 10 minutes to fill out our easy to complete mortgage application.
+                Your mortgage application will be sent to our team and you will get a confirmation that your application has been received.</p>
+        </div>
+    </div>
+</div>
+
+<div class="gray-back clearfix">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-2 text-center-sm text-center-xs"
+                 scroll-animate="floating">
+                <h2 class="special-margin ">Get Approved</h2>
+                <p class="text-muted">We will review your application and contact you by 4:00 pm on the next business day.</p>
+            </div>
+            <div class="col-md-6 text-center text-center-sm text-center-xs">
+                <img src="resources/img/clickboard.png" scroll-animate="floating2" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container special-margin-container">
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <img src="resources/img/credit-big.png"
+                 scroll-animate="floating"/>
+        </div>
+        <div class="col-md-4"
+             scroll-animate="floating2">
+            <h2 class="special-margin text-center-sm text-center-xs">Get Cash Back</h2>
+            <p class="text-muted text-center-sm text-center-xs">Once your deal has been funded, your cash back will be payable.</p>
+        </div>
+    </div>
+</div>

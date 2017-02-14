@@ -1,0 +1,806 @@
+<div class="container">
+    <div class="row padding-top-bottom-m">
+        <div class="col-sm-4 col-md-3">
+            <div class="card-box text-center marginTop">
+                <img ng-src="{{userHandler.getProfileImage()}}" class="user-img img-circle">
+                <h3>{{ userHandler.getName() }}</h3>
+                <h1 class="bigF">
+                    {{sessionUser.get('rebates') | noFractionCurrency}}
+                    <small class="center-block smaller">Total rebates</small>
+                </h1>
+                <button class="btn btn-primary margin-top"
+                        ng-click="next('dashboard/edit-profile')">Edit profile</button>
+                <div  class="ng-hide margin-top"
+                      is-role="Administrator">
+                    <button class="btn btn-default btn-block"
+                        ng-click="next('dashboard/manage-applications')">Manage applications</button>
+                    <button class="btn btn-default btn-block"
+                            ng-click="next('dashboard/manage-admins')">Manage admins</button>
+                </div>
+            </div>
+            <div class="card-box">
+                <h5 class="aleoFont">My application</h5>
+                <div class="row text-center-sm text-center-xs margin-top"
+                     ng-show="UserApplication!=null">
+                    <div class="col-md-4">
+                        <img ng-src="{{userHandler.getProfileImage()}}" class="img-circle img-responsive">
+                    </div>
+                    <div class="col-md-8">
+                        <h4>{{sessionUser.get("firstName")+" "+sessionUser.get("lastName")}}</h4>
+                        <button class="btn btn-default btn-sm"
+                                ng-click="next('dashboard/my-application-status');">View Status</button>
+                    </div>
+                </div>
+                <div class="row text-center-sm text-center-xs margin-top"
+                     ng-hide="UserApplication!=null">
+                    <div class="col-xs-12">
+                        You didn't start yet.
+                        <button class="btn btn-block btn-primary btn-sm"
+                                ng-click="next('apply-now')">Start your application</button>
+                    </div>
+                </div>
+                <hr class="borderDiv" />
+                <h5 class="aleoFont">My referrals</h5>
+                <div class="row text-center-sm text-center-xs margin-top"
+                     ng-repeat="referal in userReferals | limitTo:referallsLimit">
+                    <div class="col-md-4">
+                        <img ng-if="referal.has('profileImg')" ng-src="{{ referal.get('profileImg').url() }}"
+                             class="img-responsive img-circle">
+                        <img ng-if="referal.has('facebookId') && !referal.has('facebookId')"
+                             ng-src="https://graph.facebook.com/{{referal.get('facebookId')}}/picture?width=125&height=125"
+                             class="img-responsive img-circle">
+                        <img ng-if="!referal.has('facebookId') && !referal.has('profileImg')"
+                             ng-src="resources/img/user-placeholder.png"
+                             class="img-responsive img-circle">
+                    </div>
+                    <div class="col-md-8">
+                        <h4>{{referal.get("firstName")+" "+referal.get("lastName")}}</h4>
+                        <button class="btn btn-default btn-sm"
+                                ng-click="next('dashboard/my-referal-status/'+referal.id);">View Status</button>
+                    </div>
+                </div>
+                <div class="row margin-top"
+                     ng-show="userReferals.length>referallsLimit">
+                    <div class="col-xs-12">
+                        <button class="btn btn-default btn-sm btn-block"
+                                ng-click="increaseReferallsLimit()">Load more</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-8 col-md-6">
+            <div class="card-box">
+            <div ng-if="page.isActive('manage-applications')"
+                 class="ng-hide"
+                 is-role="Administrator">
+                    <h1 class="aleoFont">Manage applications<br/> <small>All applications: {{count}}</small></h1>
+
+                <div class="bordered">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input class="form-control input-sm" placeholder="Search by name" ng-change="setNew(searchByFName, 'searchByFName')" ng-model="searchByFName" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input class="form-control input-sm" placeholder="Search by application number" ng-change="setNew(searchByNumber, 'searchByNumber')"
+                                       ng-model="searchByNumber" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-control input-sm"
+                                    ng-change="setNew(searchByMortype, 'searchByMortype')"
+                                    ng-model="searchByMortype">
+                                <option value="">Mortgage type</option>
+                                <option value="Fixed">Fixed</option>
+                                <option value="Variable">Variable</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input class="form-control input-sm" placeholder="Search by application date" ng-change="setNew(searchByApplicationDate, 'searchByApplicationDate')"
+                                       ng-model="searchByApplicationDate"
+                                       ng-calendar/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input class="form-control input-sm" placeholder="Search by closing date" ng-change="setNew(searchByClosingDate, 'searchByClosingDate')"
+                                       ng-model="searchByClosingDate"
+                                       ng-calendar/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <select class="form-control input-sm"
+                                        ng-change="setNew(listLimit, 'listLimit')"
+                                        ng-model="listLimit">
+                                    <option value="1">1 application/page</option>
+                                    <option value="5">5 application/page</option>
+                                    <option value="10">10 application/page</option>
+                                    <option value="25">25 application/page</option>
+                                    <option value="50">50 application/page</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <select class="form-control input-sm"
+                                        ng-change="setNew(listOrder, 'listOrder')"
+                                        ng-model="listOrder">
+                                    <option value="1">Order by application date Desc</option>
+                                    <option value="2">Order by application date Asc</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center padding-top"
+                     ng-show="isload()">
+                    <i class="fa fa-spin fa-spinner fa-2x"></i>
+                </div>
+                <div class="row applicationBox"
+                     ng-repeat="applicat in applications track by $index"
+                     ng-show="!isload()">
+                    <div class="col-xs-1 text-center">
+                        <i class="fa fa-file-text fa-3x"
+                           ng-class="{
+                           'text-info' : applicat.get('ApplicationStatus')==2,
+                           'text-danger' : applicat.get('ApplicationStatus')==1,
+                            'text-warning' : applicat.get('ApplicationStatus')==0,
+                            'text-success' : applicat.get('ApplicationStatus')==3,
+                             'text-success' : applicat.get('ApplicationStatus')==4,
+                             'text-success' : applicat.get('ApplicationStatus')==5}"></i>
+                    </div>
+                    <div class="col-xs-8 col-xs-offset-1">
+                        <h4 class="no-margin">
+                            <a href="/application/{{applicat.id}}">
+                                {{applicat.get('Personal1Fname')}} {{applicat.get('Personal1Lname')}}
+                           </a>
+                        </h4>
+                        <small>
+                            #{{applicat.get('refId')}}
+                            <strong class="text-warning" ng-if="applicat.get('ApplicationStatus')==0">Started</strong>
+                            <strong class="text-danger" ng-if="applicat.get('ApplicationStatus')==1">Submited</strong>
+                            <strong class="text-info" ng-if="applicat.get('ApplicationStatus')==2">Recieved</strong>
+                            <strong class="text-info" ng-if="applicat.get('ApplicationStatus')==3">Pending</strong>
+                            <strong class="text-success" ng-if="applicat.get('ApplicationStatus')==4">Approved</strong>
+                            <strong class="text-success" ng-if="applicat.get('ApplicationStatus')==5">Completed</strong>
+                            <br/>
+                            <i class="fa fa-clock-o"></i> {{ applicat.createdAt | date:'medium' }}
+                        </small>
+                    </div>
+                    <div class="col-xs-2 text-right">
+                            <button class="btn btn-default btn-sm" ng-click="applicat.destroy(); removeApplication($index)">
+                                <i class="fa fa-trash-o text-danger cursor"></i>
+                            </button>
+                    </div>
+                </div>
+
+                <div ng-show="isPagination()">
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-xs-10 col-xs-offset-1">
+                                <ul class="pagination">
+                                    <li ng-class="{'disabled' : offset == 0 || isload()}"><a href="#" ng-disabled="offset == 0 || isload()" prevent-def ng-click="decreaseOffset()">&laquo;</a></li>
+
+                                    <li ng-repeat="page in  numPages() track by $index"
+                                        ng-class="{'disabled' : isload(), 'active' : $index == offset}"><a href="#" prevent-def ng-click="setOffset($index)">{{$index+1}}</a></li>
+
+                                    <li ng-class="{'disabled' : offset+1 >= pages || isload()}"><a href="#" ng-disabled="offset+1 >= pages || isload()" prevent-def ng-click="increaseOffset()">&raquo;</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div ng-if="page.isActive('manage-admins')"
+                     class="ng-hide"
+                     is-role="Administrator">
+                    <h1 class="aleoFont">Manage admins</h1>
+                    <form novalidate="true"
+                          role="form"
+                          class="modalForm text-left"
+                          name="addAdminForm"
+                          ng-submit="addAdmin(addAdminForm); adminMail=''; addAdminForm.$setPristine()"
+                          autocomplete="off">
+
+                        <div class="form-group"
+                             ng-class="{'invalid': addAdminForm.adminMail.$invalid && !addAdminForm.adminMail.$pristine || addAdminForm.adminMail.$error.unique}">
+                            <input type="email"
+                                   class="form-control"
+                                   placeholder="Enter user email"
+                                   required
+                                   ng-exist
+                                   ng-required="true"
+                                   name="adminMail"
+                                   ng-model="adminMail" />
+                            <small class="text-danger text-block padding-left"
+                                   ng-show="addAdminForm.adminMail.$error.unique">User with that email
+                                don't exist.</small>
+                            <small class="text-danger text-block padding-left"
+                                   ng-show="!addAdminForm.adminMail.$error.unique && addAdminForm.adminMail.$invalid && !addAdminForm.adminMail.$pristine">Enter valid email</small>
+                        </div>
+
+                        <div class="text-right top-mar-form">
+                            <button class="btn btn-success"
+                                    ng-disabled="addAdminForm.$invalid">Add admin</button>
+                        </div>
+                    </form>
+                    <h4>Admins</h4>
+                    <ul class="list-unstyled">
+                        <li class="clearfix" ng-repeat="admin in admins track by $index">
+                            {{admin.get("email")}}
+                            <button class="btn btn-link pull-right"
+                                    ng-click="removeAdmin($index)"><i class="fa fa-times"></i></button>
+                        </li>
+                    </ul>
+
+                </div>
+                <div ng-if="page.isActive('main')">
+                    <h1 class="aleoFont" ng-hide="UserApplication==null">My application</h1>
+                    <div class="application-card-box"
+                         ng-hide="UserApplication==null">
+                        <div class="application-card-box-header">
+                            <div class="row">
+                                <div class="col-sm-2 text-center">
+                                    <img ng-src="{{userHandler.getProfileImage()}}"class="img-circle img-responsive">
+                                </div>
+                                <div class="col-sm-7 text-center">
+                                    <strong class="center-block text-primary">My Application</strong>
+                                    <span class="label label-primary">{{UserApplication.get('MortageRate')}}</span>
+                                    <span class="label label-primary">{{UserApplication.get('MortageType')}}</span>
+                                    <span class="label label-primary">{{UserApplication.get('MortageTerm')}}</span>
+                                </div>
+                                <div class="col-sm-3">
+                                    <h3 class="aleoFont text-center">
+                                        {{UserApplication.get('CashBack')| noFractionCurrency}}
+                                        <small class="center-block small-text">Cash Back on Closing</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <ul class="progress-list list-unstyled clearfix">
+                                    <li ng-class="{'active': UserApplication.get('ApplicationStatus') > 1 }">
+                                        <span class="circle">1</span>
+                                        <strong>Application Received</strong>
+                                    </li>
+                                    <li ng-class="{'active': UserApplication.get('ApplicationStatus') > 2 }">
+                                        <span class="circle">2</span>
+                                        <strong> Application Under Review</strong>
+                                    </li>
+                                    <li ng-class="{'active': UserApplication.get('ApplicationStatus') > 3 }">
+                                        <span class="circle">3</span>
+                                        <strong>Application Approved</strong>
+                                    </li>
+                                    <li ng-class="{'active': UserApplication.get('ApplicationStatus') > 4 }">
+                                        <span class="circle">4</span>
+                                        <strong>Application Complete</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="padding">
+                                    <div ng-show="UserApplication.get('ApplicationStatus')==2">
+                                        <h4>Your Application has been received</h4>
+                                        <p class="small">Congratulations on doing your own mortgage application, you’re on your way to earning your cashback!
+                                            One of our agents is reviewing your deal and will update your status and contact you by 4:00 pm on the next business day.</p>
+                                    </div>
+                                    <div ng-show="UserApplication.get('ApplicationStatus')==3">
+                                        <h4>Your Application is under review</h4>
+                                        <p class="small">Congratulations on doing your own mortgage application, your application has been approved!
+                                            One of our agents will contact you to review your approval</p>
+                                    </div>
+                                    <div ng-show="UserApplication.get('ApplicationStatus')==4">
+                                        <h4>Your Application has been approved</h4>
+                                        <p class="small">Congratulations on doing your own mortgage application, your application has been approved!
+                                            One of our agents will contact you to review your approval</p>
+                                    </div>
+                                    <div ng-show="UserApplication.get('ApplicationStatus')==5">
+                                        <h4>Your Application has been completed</h4>
+                                        <p class="small">
+                                            Congratulations on doing your own mortgage application, your application has been completed!</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12"
+                                 ng-show="UserApplication.get('ApplicationStatus')<4">
+                                <div class="text-right padding">
+                                    <button class="btn"
+                                            ng-click="editMyApplication()">
+                                        Edit your application
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr ng-hide="UserApplication==null" />
+                    <h1 class="aleoFont">Activity</h1>
+                    <div ng-repeat="activ in activity | limitTo:activityLimit"
+                         class="alert-Box {{activ.alert}}">
+                            <span ng-bind-html="activ.txt | toTrusted"></span>
+                    </div>
+                    <button class="btn btn-default btn-sm btn-block"
+                            ng-show="activity.length>activityLimit"
+                            ng-click="increaseActivityLimit()">Load more</button>
+                </div>
+                <div ng-if="page.isActive('edit-profile')">
+                    <ol class="breadcrumb">
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li class="active">Edit profile</li>
+                    </ol>
+
+                        <!-- Basic info -->
+                        <h3 class="aleoFont">Edit basic info</h3>
+                        <form novalidate="true"
+                              role="form"
+                              class="modalForm"
+                              name="editProfileForm"
+                              ng-submit="userHandler.update(editProfileForm)"
+                              autocomplete="off">
+
+                                    <div class="form-group"
+                                         ng-class="{'invalid': editProfileForm.ufname.$invalid && !editProfileForm.ufname.$pristine}">
+                                        <input type="text"
+                                               class="form-control"
+                                               placeholder="Enter your first name"
+                                               name="ufname"
+                                               ng-model="ufname" />
+                                    </div>
+
+                                    <div class="form-group"
+                                         ng-class="{'invalid': editProfileForm.ulname.$invalid && !editProfileForm.ulname.$pristine}">
+                                        <input type="text"
+                                               class="form-control"
+                                               placeholder="Enter your last name"
+                                               name="ulname"
+                                               ng-model="ulname" />
+                                    </div>
+
+                                    <div class="form-group"
+                                         ng-class="{'invalid': editProfileForm.uaddress.$invalid && !editProfileForm.uaddress.$pristine}">
+                                        <input type="text"
+                                               class="form-control"
+                                               placeholder="Address"
+                                               name="uaddress"
+                                               ng-model="uaddress" />
+                                    </div>
+
+                                    <div class="form-group"
+                                         ng-class="{'invalid': editProfileForm.uaddress2.$invalid && !editProfileForm.uaddress2.$pristine}">
+                                        <input type="text"
+                                               class="form-control"
+                                               placeholder="Address 2"
+                                               name="uaddress2"
+                                               ng-model="uaddress2" />
+                                    </div>
+
+                                    <div class="row">
+
+                                    <div class="col-sm-4">
+                                    <div class="form-group"
+                                         ng-class="{'invalid': editProfileForm.upostal.$invalid && !editProfileForm.upostal.$pristine}">
+                                        <input type="text"
+                                               class="form-control"
+                                               placeholder="Postal code"
+                                               ng-postal
+                                               name="upostal"
+                                               ng-model="upostal" />
+                                    </div>
+                                    </div>
+                                    <div class="col-sm-8">
+                                    <div class="form-group"
+                                         ng-class="{'invalid': editProfileForm.ucity.$invalid && !editProfileForm.ucity.$pristine}">
+                                        <input type="text"
+                                               class="form-control"
+                                               placeholder="City"
+                                               name="ucity"
+                                               ng-model="ucity" />
+                                    </div>
+                                    </div>
+                                    </div>
+
+                                    <div class="form-group"
+                                         ng-class="{'invalid': editProfileForm.uprovince.$invalid && !editProfileForm.uprovince.$pristine}">
+                                        <select class="form-control"
+                                                name="uprovince"
+                                                ng-model="uprovince">
+                                            <option value="">Choose province</option>
+                                            <option value="AB">Alberta</option>
+                                            <option value="BC">British  Columbia</option>
+                                            <option value="MB">Manitoba</option>
+                                            <option value="NB">New Brunswick</option>
+                                            <option value="NF">Newfoundland</option>
+                                            <option value="NS">Nova Scotia</option>
+                                            <option value="NT">Northwest Territories</option>
+                                            <option value="NU">Nunavut</option>
+                                            <option value="ON">Ontario</option>
+                                            <option value="QC">Quebec</option>
+                                            <option value="PE">P.E.I.</option>
+                                            <option value="SK">Saskatchewan</option>
+                                            <option value="YK">Yukon</option>
+                                        </select>
+                                    </div>
+
+                            <div class="text-success"
+                                 ng-show="errors.isLive('updateBasicInfo')">
+                                {{errors.get('updateBasicInfo')}}
+                            </div>
+                            <div class="text-right">
+                                    <button class="btn btn-default"
+                                            ng-disabled="editProfileForm.$invalid">Update my basic info</button>
+                            </div>
+                        </form>
+                        <hr class="borderDiv" />
+                        <!-- #Basic info -->
+
+                    <!-- Basic info -->
+                    <h3 class="aleoFont">Link your account</h3>
+
+
+                         <button class="btn btn-default btn-block btn-facebook"
+                                 ng-click="userHandler.linkFB()">
+                                 <span ng-show="sessionUser.has('facebookId')">Unlink your account from facebook</span>
+                                 <span ng-hide="sessionUser.has('facebookId')">Link your account with facebook</span>
+                                 </button>
+                        <button class="btn btn-default btn-block btn-google"
+                                ng-click="userHandler.linkGoogle()">
+                            <span ng-show="sessionUser.has('googleId')">Unlink your account from google</span>
+                            <span ng-hide="sessionUser.has('googleId')">Link your account with google</span>
+                        </button>
+
+                    </form>
+                    <hr class="borderDiv" />
+                    <!-- #Basic info -->
+
+                        <!-- Upload profile -->
+                    <h3 class="aleoFont">Upload profile image</h3>
+
+                            <div class="form-group">
+                                <input type="file"
+                                       class="form-control"
+                                       id="profileImg"/>
+                            </div>
+
+                            <div class="text-right">
+                                <button class="btn btn-default"
+                                     ng-click="uploadFile()">
+                                    <span ng-hide="isFileUploading()">Upload</span>
+                                    <span ng-show="isFileUploading()"><i class="fa fa-spin fa-spinner"></i></span>
+                                </button>
+                            </div>
+
+
+                        <!-- #Upload profile -->
+                        <hr class="borderDiv" />
+                        <!-- Password -->
+                        <h3 class="aleoFont">Change password</h3>
+
+                        <form novalidate="true"
+                              role="form"
+                              class="modalForm"
+                              name="changePasswordForm"
+                              ng-submit="userHandler.changePassword(changePasswordForm)"
+                              autocomplete="off">
+                            <div class="form-group"
+                                 ng-class="{'invalid': changePasswordForm.password.$invalid && !changePasswordForm.password.$pristine}">
+                                <input type="password"
+                                       class="form-control"
+                                       placeholder="Enter your current password"
+                                       required
+                                       ng-required="true"
+                                       name="password"
+                                       ng-model="password"
+                                       ng-minlength="6" />
+                                <small class="text-danger padding-left" ng-show="changePasswordForm.password.$invalid && !changePasswordForm.password.$pristine">At leas 6 charachters long.</small>
+                            </div>
+
+                            <div class="form-group"
+                                 ng-class="{'invalid': changePasswordForm.npassword.$invalid && !changePasswordForm.npassword.$pristine}">
+                                <input type="password"
+                                       class="form-control"
+                                       placeholder="Enter your new password"
+                                       required
+                                       ng-required="true"
+                                       name="npassword"
+                                       ng-model="npassword"
+                                       ng-minlength="6" />
+                                <small class="text-danger padding-left" ng-show="changePasswordForm.npassword.$invalid && !changePasswordForm.npassword.$pristine">At leas 6 charachters long.</small>
+                            </div>
+                            <div class="form-group"
+                                 ng-class="{'invalid': changePasswordForm.cpassword.$invalid && !changePasswordForm.cpassword.$pristine}">
+                                <input type="password"
+                                       class="form-control"
+                                       placeholder="Confirm your new password"
+                                       required
+                                       ng-required="true"
+                                       name="cpassword"
+                                       password-match="npassword"
+                                       ng-model="cpassword"
+                                       ng-minlength="6" />
+                                <small class="text-danger padding-left" ng-show="changePasswordForm.cpassword.$invalid && !changePasswordForm.cpassword.$pristine">Passwords dosen't match.</small>
+                            </div>
+                            <div class="text-success"
+                                 ng-show="errors.isLive('updatePasswordInfo')">
+                                {{errors.get('updatePasswordInfo')}}
+                            </div>
+
+                            <div class="text-right">
+                            <button class="btn btn-default"
+                                    ng-disabled="changePasswordForm.$invalid">Change password</button>
+                            </div>
+                        </form>
+                        <!-- #Password -->
+                </div>
+                <div ng-if="page.isActive('my-application-status')">
+                    <ol class="breadcrumb">
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li class="active">My application status</li>
+                    </ol>
+                    <h1 class="aleoFont">My application</h1>
+                    <div class="application-card-box">
+                        <div class="application-card-box-header">
+                            <div class="row">
+                                <div class="col-sm-2 text-center">
+                                    <img ng-src="{{userHandler.getProfileImage()}}"class="img-circle img-responsive">
+                                </div>
+                                <div class="col-sm-7 text-center">
+                                    <strong class="center-block text-primary">My Application</strong>
+                                    <span class="label label-primary">{{UserApplication.get('MortageRate')}}</span>
+                                    <span class="label label-primary">{{UserApplication.get('MortageType')}}</span>
+                                    <span class="label label-primary">{{UserApplication.get('MortageTerm')}}</span>
+                                </div>
+                                <div class="col-sm-3">
+                                    <h3 class="aleoFont text-center">
+                                        {{UserApplication.get('CashBack')| noFractionCurrency}}
+                                        <small class="center-block small-text">Cash Back on Closing</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <ul class="progress-list list-unstyled clearfix">
+                                    <li ng-class="{'active': UserApplication.get('ApplicationStatus')>1}">
+                                        <span class="circle">1</span>
+                                        <strong>Application Received</strong>
+                                    </li>
+                                    <li ng-class="{'active': UserApplication.get('ApplicationStatus')>2}">
+                                        <span class="circle">2</span>
+                                        <strong> Application Under Review</strong>
+                                    </li>
+                                    <li ng-class="{'active': UserApplication.get('ApplicationStatus')>3}">
+                                        <span class="circle">3</span>
+                                        <strong>Application Approved</strong>
+                                    </li>
+                                    <li ng-class="{'active': UserApplication.get('ApplicationStatus')>4}">
+                                        <span class="circle">4</span>
+                                        <strong>Application Complete</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="padding">
+                                    <div ng-show="UserApplication.get('ApplicationStatus')==2">
+                                        <h4>Your Application has been received</h4>
+                                        <p class="small">Congratulations on doing your own mortgage application, you’re on your way to earning your cashback!
+                                            One of our agents is reviewing your deal and will update your status and contact you by 4:00 pm on the next business day.</p>
+                                    </div>
+                                    <div ng-show="UserApplication.get('ApplicationStatus')==3">
+                                        <h4>Your Application is under review</h4>
+                                        <p class="small">One of our agents is reviewing your application and will contact you to collect any required documents.</p>
+                                    </div>
+                                    <div ng-show="UserApplication.get('ApplicationStatus')==4">
+                                        <h4>Your Application has been approved</h4>
+                                        <p class="small">Congratulations on doing your own mortgage application, your application has been approved!
+                                            One of our agents will contact you to review your approval</p>
+                                    </div>
+                                    <div ng-show="UserApplication.get('ApplicationStatus')==5">
+                                        <h4>Your Application has been completed</h4>
+                                        <p class="small">
+                                            Congratulations on doing your own mortgage application, your application has been completed!</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12"
+                                 ng-show="UserApplication.get('ApplicationStatus')<4">
+                                <div class="text-right padding">
+                                    <button class="btn"
+                                            ng-click="editMyApplication()">
+                                        Edit your application
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="page.isActive('my-referal-status')">
+                    <ol class="breadcrumb">
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li class="active">My referral status</li>
+                    </ol>
+                    <h1 class="aleoFont">My Referrals</h1>
+                    <div class="application-card-box">
+                        <div class="application-card-box-header">
+                            <div class="row">
+                                <div class="col-sm-2 text-center">
+                                    <img ng-if="referall.has('profileImg')" ng-src="{{ referall.get('profileImg').url() }}"
+                                         class="img-responsive img-circle">
+                                    <img ng-if="referall.has('facebookId') && !referall.has('facebookId')"
+                                         ng-src="https://graph.facebook.com/{{referall.get('facebookId')}}/picture?width=125&height=125"
+                                         class="img-responsive img-circle">
+                                    <img ng-if="!referall.has('facebookId') && !referall.has('profileImg')"
+                                         ng-src="resources/img/user-placeholder.png"
+                                         class="img-responsive img-circle">
+                                </div>
+                                <div class="col-sm-7 text-center">
+                                    <strong class="center-block text-primary">{{referall.get("firstName")+"
+                                        "+referall.get("lastName")}} Application</strong>
+                                    <span class="label label-primary">{{referalApplication.get('MortageRate')}}</span>
+                                    <span class="label label-primary">{{referalApplication.get('MortageType')}}</span>
+                                    <span class="label label-primary">{{referalApplication.get('MortageTerm')}}</span>
+                                </div>
+                                <div class="col-sm-3">
+                                    <h3 class="aleoFont text-center">
+                                        $500
+                                        <small class="center-block small-text">Potential Commision</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <ul class="progress-list list-unstyled clearfix">
+                                    <li ng-class="{'active': referalApplication.get('ApplicationStatus')>1}">
+                                        <span class="circle">1</span>
+                                        <strong>Application Received</strong>
+                                    </li>
+                                    <li ng-class="{'active': referalApplication.get('ApplicationStatus')>2}">
+                                        <span class="circle">2</span>
+                                        <strong> Application Under Review</strong>
+                                    </li>
+                                    <li ng-class="{'active': referalApplication.get('ApplicationStatus')>3}">
+                                        <span class="circle">3</span>
+                                        <strong>Application Approved</strong>
+                                    </li>
+                                    <li ng-class="{'active': referalApplication.get('ApplicationStatus')>4}">
+                                        <span class="circle">4</span>
+                                        <strong>Application Complete</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="padding">
+                                    <div ng-show="referalApplication.get('ApplicationStatus')==2">
+                                        <h4>{{referall.get("firstName")}} Application has been received</h4>
+                                        <p class="small">Congratulations on doing your own mortgage application, you’re on your way to earning your cashback!
+                                            One of our agents is reviewing your deal and will update your status and contact you by 4:00 pm on the next business day.</p>
+                                    </div>
+                                    <div ng-show="referalApplication.get('ApplicationStatus')==3">
+                                        <h4>{{referall.get("firstName")}} Application is under review</h4>
+                                        <p class="small">Congratulations on doing your own mortgage application, your application has been approved!
+                                            One of our agents will contact you to review your approval</p>
+                                    </div>
+                                    <div ng-show="referalApplication.get('ApplicationStatus')==4">
+                                        <h4>{{referall.get("firstName")}} Application has been approved</h4>
+                                        <p class="small">Congratulations on doing your own mortgage application, your application has been approved!
+                                            One of our agents will contact you to review your approval</p>
+                                    </div>
+                                    <div ng-show="referalApplication.get('ApplicationStatus')==5">
+                                        <h4>{{referall.get("firstName")}} Application has been completed</h4>
+                                        <p class="small">
+                                            Congratulations on doing your own mortgage application, your application has been completed!</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-3">
+            <div class="card-box">
+                <h2 class="aleoFont">Refer a friend</h2>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label>Your Referral Url</label>
+                        <div class="form-group form-group-sm">
+                            <input ng-referalshow type="text" select-on-click class="form-control input-sm" value="https://www.doyourownmortgage.com/r/{{sessionUser.id}}">
+                        </div><!-- /input-group -->
+                        <label>Email a friend's email</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form novalidate="true"
+                              role="form"
+                              name="sendRefferalForm"
+                              ng-submit="sendRefferal(sendRefferalForm)"
+                              autocomplete="off">
+                        <div class="form-group input-group input-group-sm">
+                            <input type="email"
+                                   class="form-control"
+                                   placeholder="Enter a friend's Email"
+                                   name="remail"
+                                   ng-uniquetype
+                                   ng-model="remail">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary"
+                                        is-role="Administrator">
+                                    <span ng-hide="isRSendign()">Send</span>
+                                    <span ng-show="isRSendign()"><i class="fa fa-spin fa-spinner"></i></span>
+                                </button>
+                                <button class="btn btn-primary"
+                                        is-not-role="Administrator"
+                                        ng-disabled="isRSendign() || sendRefferalForm.$invalid">
+                                    <span ng-hide="isRSendign()">Send</span>
+                                    <span ng-show="isRSendign()"><i class="fa fa-spin fa-spinner"></i></span>
+                                </button>
+                            </span>
+                        </div><!-- /input-group -->
+                        <div is-not-role="Administrator">
+                            <small class="text-danger center-block padding-left" ng-show="sendRefferalForm.remail.$error.unique">User with that email already exist.</small>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label>Share it</label>
+                        <div class="form-group">
+                            <div class="btn-group btn-group-lg">
+                                <button class="btn btn-default" ng-click="publishOnFb()"><i class="fa fa-facebook"></i></button>
+                                <a target="_blank" class="btn btn-default"
+                                    href="https://plus.google.com/share?url=https://www.doyourownmortgage.com/r/{{sessionUser.id}}"><i class="fa fa-google-plus"></i></a>
+                                <a class="btn btn-default" href="{{publishOnTwitter()}}"><i class="fa fa-twitter"></i></a>
+                            	<a target="_blank" class="btn btn-default" href="{{publishOnLn()}}"><i class="fa fa-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="blueIcon">
+                <h3 class="aleoFont">Email Documents</h3>
+                <div class="text-center">
+                    <a class="btn btn-default"
+                       target="_blank"
+                       href="mailto:docs@doyourownmortgage.com?Subject=Complete%20your%20application&Body=To%20complete%20your%20application%20with%20the%20lender%20please%20attach%20the%20following%20documents%20to%20this%20email%3A%20%0A%0A-%20A%20recent%20paystub%0A-%20Job%20letter%20or%20confirmation%20of%20employment%0A-%20Bank%20statement%0A-%20Agreement%20of%20purchase%20+%20sale%0A-%20Mortgage%20Statement%0A-%20Void%20Cheque%0A-%202%20Pieces%20of%20government%20issued%20photo%20ID%0A-%20Your%20lawyer%27s%20contact%20information%0A%0APlease%20feel%20free%20to%20include%20any%20additional%20notes%20here%3A%0A%0A%0AThanks%2C%0AThe%20Do%20Your%20Own%20Mortgage%20Team">
+                        Email Documents</a>
+                </div>
+                <ul class="list-unstyled">
+                    <li class="clearfix">
+                        <div class="pull-left"><i class="fa fa-map-marker"></i></div>
+                        <span>
+                            <strong>Get Approved Faster</strong>
+                            We’ll need some documents to approve your mortgage. Click here and attach your documents.
+                        </span>
+                    </li>
+                    <li class="clearfix">
+                        <div class="pull-left"><i class="fa fa-envelope"></i></div>
+                        <span>
+                             docs@doyourownmortgage.com
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

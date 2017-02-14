@@ -1,0 +1,93 @@
+<nav class="top-navigation"
+     nav-check>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-2 col-md-4 text-center-sm">
+                <a href="/">
+                    <img src="resources/img/logo.png"
+                        class="cursor logo-white"/>
+                    <img src="resources/img/logo-black.png"
+                         class="cursor logo-black"/>
+                </a>
+                <button class="btn btn-sm btn-default pull-right visible-xs margin-top-bottom"
+                        ng-click="togleNav()"><i class="fa fa-bars"></i></button>
+            </div>
+            <div class="col-xs-12 col-sm-10 col-md-8 text-center-xs text-right-md text-right-lg text-right-sm"
+                 ng-class="{'active-nav': isNavActive(), 'hidden-xs': !isNavActive()}">
+                <ul class="list-unstyled list-inline nav-links">
+                    <li   ng-class="{'active':isThis('/how-it-works')}"
+                          ng-if="sessionUser == null && !isThis('/become-partner')">
+                        <a href="how-it-works"
+                           ng-click="togleNav()">
+                            How it Works
+                        </a>
+                    </li>
+                    <!--<li  ng-class="{'active':isThis('/about')}"-->
+                         <!--ng-if="sessionUser == null && !isThis('/become-partner')">-->
+                        <!--<a href="#/about"-->
+                           <!--ng-click="togleNav()">-->
+                            <!--About us-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <li ng-hide="sessionUser==null"
+                        close-out
+                        ng-click="togleDrop3=!togleDrop3"
+                        class="u-drop userDrop">
+                        <div class="clearfix">
+                            <a href="user" prevent-def>
+                                <img ng-src="{{userHandler.getProfileImage()}}" class="user-img img-circle">
+                                {{ userHandler.getName() }}
+                                 <i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul class="drop-menu text-left"
+                                ng-show="togleDrop3">
+                                <li><a href="dashboard">Dashboard</a></li>
+                                <li><a href="#" prevent-def ng-click=" userHandler.logMeOut()">Logout</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li ng-show="!isThis('/apply-now') && !isThis('/become-partner')"
+                        class="special-btn-nav">
+                        <a href="apply-now"
+                           ng-click="togleNav()">
+                            <span ng-show="sessionUser == null">Get started</span>
+                            <span ng-show="sessionUser != null">Continue</span>
+                        </a>
+                    </li>
+                    <li ng-show="isThis('/become-partner') && sessionUser == null"
+                        class="special-btn-nav">
+                        <a href="dashboard">
+                            Get started
+                        </a>
+                    </li>
+                    <li ng-show="isThis('/apply-now') && sessionUser != null"
+                        class="special-btn-nav">
+                        <a href="#"
+                           prevent-def
+                           ng-show="sessionUser != null"
+                           ng-click="saveAppR()"
+                           ng-disabled="isAppSavingR()">
+                            <span ng-show="!isAppSavingR()"><span ng-show="!isSaved()">Save my Application</span> <span ng-show="isSavedR()"><i class="fa fa-check-circle"></i></span></span>
+                            <span ng-show="isAppSavingR()">Saving <i class="fa fa-spin fa-spinner"></i></span>
+                        </a>
+                    </li>
+                    <li  ng-if="sessionUser == null">
+                        <a href="#"
+                           prevent-def
+                           data-toggle="modal" data-target="#login"
+                           ng-click="togleNav()">
+                           Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--
+        <div class="row">
+          <div style="margin-right:20px;" class="text-right-md text-right-lg text-right-sm">
+            <a style="color:#FFF;" href="tel:1-800-298-3966">1-800-298-3966</a>
+          </div>
+        </div>
+        -->
+    </div>
+</nav>

@@ -1,0 +1,3114 @@
+<div class="container padding-bottom"
+     ng-show="successSubmit">
+    <div class="row padding-top">
+        <div class="col-xs-12 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 text-center">
+            <div class="box">
+            <span class="fa-stack fa-5x">
+              <i class="fa fa-circle fa-stack-2x"></i>
+              <i class="fa fa-check fa-stack-1x fa-inverse"></i>
+            </span>
+            <h1>Congratulations,<br/> You just did your own mortgage!</h1>
+            <p>One of our mortgage agents will review your application and contact you by 4:00 PM on the next business day at the email or telephone number that you provided.</p>
+            <p><strong>Your application # is {{Application.refId}}</strong></p>
+            <p>Should you have any questions or concerns, please feel free to email us at <a href="mailto:questions@doyourownmortgage.com">questions@doyourownmortgage.com</a> and be
+                sure to include your application number.</p>
+
+            <h2>Referral Program</h2>
+            <p>Want to earn even more cash? Refer a friend and get $500 upon approval of their mortgage.</p>
+
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <label>Share this Link:</label>
+                    <div class="form-group form-group-sm">
+                        <input type="text" select-on-click class="form-control input-sm" value="https://www.doyourownmortgage.com/r/{{sessionUser.id}}">
+                    </div><!-- /input-group -->
+                </div>
+            </div>
+            <hr/>
+            <div class="row top-margin">
+                <div class="col-sm-5">
+                    <h4>Send a Facebook Message</h4>
+                    <button class="btn btn-default" ng-click="publishOnFb()"><i class="fa fa-facebook"></i> Send a message</button>
+                </div>
+                <div class="col-sm-3">
+                    <h4>Tweet a Friend</h4>
+                    <a class="btn btn-default" href="{{publishOnTwitter()}}"><i class="fa fa-twitter"></i> Tweet</a>
+                </div>
+                <div class="col-sm-4">
+                    <h4>Email a Friend</h4>
+                            <form novalidate="true"
+                                  role="form"
+                                  name="sendRefferalForm"
+                                  ng-submit="sendRefferal(sendRefferalForm)"
+                                  autocomplete="off">
+                                <div class="form-group input-group input-group-sm">
+                                    <input type="email"
+                                           class="form-control"
+                                           placeholder="Enter a friend's Email"
+                                           name="remail"
+                                           ng-uniquetype
+                                           ng-model="remail">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary"
+                                        ng-disabled="isRSendign() || sendRefferalForm.$invalid">
+                                    <span ng-hide="isRSendign()">Send</span>
+                                    <span ng-show="isRSendign()"><i class="fa fa-spin fa-spinner"></i></span>
+                                </button>
+                            </span>
+                                </div><!-- /input-group -->
+                                <small class="text-danger center-block padding-left" ng-show="sendRefferalForm.remail.$error.unique">User with that email already exist.</small>
+                            </form>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container padding-bottom"
+     ng-hide="successSubmit">
+    <div class="row padding-top">
+        <div class="hidden-xs hidden-sm col-md-4">
+
+            <div class="fly-box">
+                <ul class="nav nav-pills nav-stacked">
+                    <li ng-class="{'active':isStep(0)}">
+                        <a href="#" prevent-def ng-click="setStep(0)"><i class="fa fa-file"></i> Mortgage Details <i class="fa green fa-check-circle-o pull-right mart" ng-show="isValidStep(1)"></i> </a></li>
+                    <li ng-class="{'active': isStep(1) || isStep(2) || isStep(3)}">
+                        <a href="#" prevent-def
+                           ng-click="setStep(1)"><i class="fa fa-user"></i> About You <i class="fa green fa-check-circle-o pull-right mart" ng-show="isValidStep(2) && isValidStep(3) && isValidStep(4)"></i></a>
+                        <ul class="list-special"
+                            ng-show="isStep(1) || isStep(2) || isStep(3)">
+                            <li ng-class="{'active': isStep(1)}"><a href="#" ng-click="setStep(1)" prevent-def>Personal information <i class="fa green fa-check-circle-o " ng-show="isValidStep(2)"></i></a></li>
+                            <li ng-class="{'active': isStep(2)}"><a href="#" ng-click="setStep(2)" prevent-def>Address information <i class="fa green fa-check-circle-o " ng-show="isValidStep(3)"></i></a></li>
+                            <li ng-class="{'active': isStep(3)}"><a href="#" ng-click="setStep(3)" prevent-def>Employment information <i class="fa green fa-check-circle-o " ng-show="isValidStep(4)"></i></a></li>
+                        </ul>
+                    </li>
+                    <li ng-show="Application.Application2"
+                        ng-class="{'active': isStep(4) || isStep(5) || isStep(6)}">
+                        <a href="#" prevent-def
+                           ng-click="setStep(4)"><i class="fa fa-user"></i> Secondary Applicant <i class="fa fa-times-circle-o cursor"
+                                                                      ng-click="Application.Application2=false"></i>
+                            <i class="fa fa-check-circle-o green pull-right mart" ng-show="isValidStep(5) && isValidStep(6) && isValidStep(7)"></i></a>
+                        <ul class="list-special"
+                            ng-show="isStep(4) || isStep(5) || isStep(6)">
+                            <li ng-class="{'active': isStep(4)}"><a href="#" ng-click="setStep(4)" prevent-def>Personal information<i class="fa green fa-check-circle-o " ng-show="isValidStep(5)"></i></a></li>
+                            <li ng-class="{'active': isStep(5)}"><a href="#" ng-click="setStep(5)" prevent-def>Address information<i class="fa green fa-check-circle-o " ng-show="isValidStep(6)"></i></a></li>
+                            <li ng-class="{'active': isStep(6)}"><a href="#" ng-click="setStep(6)" prevent-def>Employment information<i class="fa green fa-check-circle-o " ng-show="isValidStep(7)"></i></a></li>
+                        </ul>
+                    </li>
+                    <li ng-class="{'active':isStep(7)}"><a href="#" ng-click="setStep(7)" prevent-def><i class="fa fa-home"></i> Property Information <i class="fa green fa-check-circle-o pull-right mart" ng-show="isValidStep(8)"></i></a></li>
+                    <li ng-class="{'active':isStep(8) || isStep(9)}" ng-if="Application.MortagePurpose != 'Refinance'">
+                        <a href="#" ng-click="setStep(8)" prevent-def><i class="fa fa-usd"></i> Financial Information  <i class="fa green fa-check-circle-o pull-right mart" ng-show="appStep>9"></i></a>
+                        <ul class="list-special"
+                            ng-show="isStep(8) || isStep(9)">
+                            <!--<li ng-class="{'active': isStep(8)}"><a href="#" ng-click="setStep(8)" prevent-def>Savings and Assets</a></li>-->
+                            <!--<li ng-class="{'active': isStep(9)}"><a href="#" ng-click="setStep(9)" prevent-def>Monthly Expenses</a></li>-->
+                        </ul>
+                    </li>
+                    <li ng-class="{'active':isStep(10)}"><a href="#" ng-click="setStep(10)" prevent-def><i class="fa fa-exclamation-circle"></i> Other Information <i class="fa green fa-check-circle-o pull-right mart" ng-show="appStep>10"></i></a></li>
+                    <li ng-class="{'active':isStep(11)}"><a href="#" ng-click="setStep(11)" prevent-def><i class="fa fa-check-circle-o"></i> Submit application</a></li>
+                    <li class="clearfix active"><a class="greena" href="#" prevent-def><strong>Rebate:</strong>
+                        <span class="pull-right">{{getMortage('rebate') | noFractionCurrency}}</span></a></li>
+                    <li class="clearfix active" ng-if="Application.get('PaymentSchedule') == 'Monthly'"><a href="#" prevent-def><strong>Monthly payment:</strong> <span class="pull-right">{{Application.get('MortagePaymentAmount') | noFractionCurrency}}</span></a></li>
+                    <li class="clearfix active" ng-if="Application.get('PaymentSchedule') == 'Bi-weekly'"><a href="#" prevent-def><strong>Bi-weekly payment:</strong> <span class="pull-right">{{Application.get('MortagePaymentAmount') | noFractionCurrency}}</span></a></li>
+                    <li class="clearfix active" ng-if="Application.get('PaymentSchedule') == 'Weekly'"><a href="#" prevent-def><strong>Weekly payment:</strong> <span class="pull-right">{{Application.get('MortagePaymentAmount') | noFractionCurrency}}</span></a></li>
+                    <li class="clearfix active"
+                        ng-if="(Application.get('MortagePurpose') == 'Purchase'
+                        || Application.get('MortagePurpose') == 'Pre-Approval')
+                        && Application.has('MortageInsurance') && Application.get('MortageInsurance')>0"
+                        pop-over
+                        title="Help"
+                        data-placement="top"
+                        data-trigger="hover"
+                        data-content="Mortgage Insurance is Required in Canada for any mortgage with less than 20% down payment">
+                        <a href="#" prevent-def>
+                            <strong>Mortgage Insurance:</strong>
+                            <span class="pull-right">{{Application.get('MortageInsurance') | noFractionCurrency}}</span>
+                        </a>
+                        <small class="text-center" style="font-size: 11px; color: #333; display: block; margin:5px">
+                            * Additional premiums may apply and are subject to the insurer guidelines. HST on premium is payable on the date
+                            of closing.</small>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="progress-box">
+                <div class="progress-radial progress-{{progress}}">
+                    <div class="overlay">
+                        {{progress}}%
+                        <small class="text-block">Application Progress</small>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-sm-12 col-md-8">
+
+        <div class="min-height-400">
+
+        <!-- New Application -->
+
+            <!-- MORTAGE DETAILS -->
+                <div class="row box"
+                     ng-show="isStep(0)">
+                        <div class="col-xs-12">
+                        <h2><i class="fa fa-file"></i> Mortgage Details</h2>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Purpose of Loan: <span class="text-danger">*</span></label>
+                                    <select class="form-control input-sm"
+                                            name="MortagePurpose"
+                                            ng-model="Application.MortagePurpose"
+                                            required
+                                            ng-required="true">
+                                        <option value="">Choose purpose of loan</option>
+                                        <option value="Purchase">Purchase</option>
+                                        <option value="Pre-Approval">Pre-Approval</option>
+                                        <option value="Refinance">Refinance</option>
+                                        <option value="Switch">Switch</option>
+                                        <option value="Construction">Construction Financing</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Purchase -->
+                        <div ng-if="Application.MortagePurpose=='Purchase'">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Purchase Price:</label>
+                                        <input type="text"
+                                               class="form-control input-sm"
+                                               ng-currency
+                                               ng-makefocussecond
+                                               name="Application.MortagePurchaseNew"
+                                               ng-model="Application.MortagePurchaseNew" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Down Payment: <span class="text-danger">*</span></label>
+                                        <!--<select class="form-control input-sm"
+                                                name="Application.PurchaseDownPercent"
+                                                ng-model="Application.PurchaseDownPercent"
+                                                required
+                                                ng-required="true"
+                                                ng-makefocusthird
+                                                ng-hide="Application.PurchaseDownPercent=='other'">
+                                                    <option value="">Select Down Payment</option>
+                                                    <option value="0.05">5%</option>
+                                                    <option value="0.1">10%</option>
+                                                    <option value="0.15">15%</option>
+                                                    <option value="0.2">20%</option>
+                                                    <option value="0.25">25%</option>
+                                                    <option value="0.3">30%</option>
+                                                    <option value="0.35">35%</option>
+                                                    <option value="0.4">40%</option>
+                                                    <option value="0.45">45%</option>
+                                                    <option value="0.5">50%</option>
+                                                    <option value="other">Enter Your Amount</option>
+                                        </select>-->
+
+
+
+                                        <span pop-over
+                                              data-placement="top"
+                                              data-trigger="hover"
+                                              data-content=" if the mortgage amount is 1mil or more, the dp is 20%, between 500k-1mil you have to base the dp on 5%of 500K, then 10%of additional, and (500k or less) – if less than or equal to 500,000 then 5%">
+                                            <input type="text"
+                                                   disabled
+                                                   class="form-control input-sm"
+                                                   name="Application.MortagePurchaseMinDownPayment"
+                                                   ng-model="Application.MortagePurchaseMinDownPayment"
+                                                   ng-currency/>
+                                        </span>
+
+                                        <div class="input-group input-group-sm"
+                                             ng-show="Application.PurchaseDownPercent=='other'">
+                                            <input type="text"
+                                                   class="form-control input-sm"
+                                                   required
+                                                   ng-required="true"
+                                                   name="Application.MortagePurchaseDownPayment"
+                                                   ng-model="Application.MortagePurchaseDownPayment"
+                                                   placeholder="Enter your amount"
+                                                   ng-currency/>
+                                                <span class="input-group-btn">
+                                                   <button class="btn btn-default"
+                                                           type="button"
+                                                           ng-click="Application.PurchaseDownPercent=''; Application.MortagePurchaseDownPayment=null">
+                                                       <i class="fa fa-times"></i>
+                                                   </button>
+                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Select Amount</label>
+                                        <!--<input type="text"
+                                               class="form-control input-sm disabled"
+                                               ng-disabled="true"
+                                               name="Application.MortagePurchaseDownPayment"
+                                               ng-model="Application.MortagePurchaseDownPayment"/>-->
+                                        <input type="text"
+                                               class="form-control input-sm"
+                                               name="Application.ManualDownPayment"
+                                               ng-model="Application.ManualDownPayment"
+                                               ng-currency/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6"
+                                     ng-class="{ 'col-sm-8' : (Application.get('MortagePurpose') == 'Purchase' || Application.get('MortagePurpose') == 'Pre-Approval') && Application.has('MortageInsurance') && Application.get('MortageInsurance')>0 }">
+                                    <div class="form-group" >
+                                        <label>Mortgage Amount:</label>
+                                        <div ng-class="{ 'input-group' : (Application.get('MortagePurpose') == 'Purchase' || Application.get('MortagePurpose') == 'Pre-Approval') && Application.has('MortageInsurance') && Application.get('MortageInsurance')>0 }">
+                                            <input type="text"
+                                                   class="form-control input-sm"
+                                                   name="Application.PurchasePrice"
+                                                   ng-limitations
+                                                   ng-currency
+                                                   ng-makefocus
+                                                   required
+                                                   ng-required="true"
+                                                   ng-model="Application.PurchasePrice">
+                                            <span class="input-group-addon"
+                                                  ng-if="(Application.get('MortagePurpose') == 'Purchase' || Application.get('MortagePurpose') == 'Pre-Approval') && Application.has('MortageInsurance') && Application.get('MortageInsurance')>0"
+                                                  pop-over
+                                                  title="Help"
+                                                  data-placement="top"
+                                                  data-trigger="hover"
+                                                  data-content="Mortgage Insurance is Required in Canada for any mortgage with less than 20% down payment">
+                                               <small> + {{Application.get('MortageInsurance') | noFractionCurrency}} Mortgage Insurance </small>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group"
+                                         ng-hide="Application.MortageMLS=='Y'">
+                                        <label>Was this home listed on MLS?  <span class="text-danger">*</span></label>
+                                        <select class="form-control input-sm"
+                                                required
+                                                ng-required="true"
+                                                name="Application.MortageMLS"
+                                                ng-model="Application.MortageMLS">
+                                            <option value="">Select option</option>
+                                            <option value="Y">Yes</option>
+                                            <option value="N">No</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group"
+                                         ng-show="Application.MortageMLS=='Y'">
+                                        <label>Enter MLS Number: <span class="text-danger">*</span></label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text"
+                                                   class="form-control input-sm"
+                                                   required
+                                                   ng-minlength="8"
+                                                   ng-maxlength="8"
+                                                   ng-mls
+                                                   ng-required="true"
+                                                   name="Application.MortageMLSNumber"
+                                                   ng-model="Application.MortageMLSNumber"
+                                                   placeholder="Enter MLS Number" />
+                                                <span class="input-group-btn">
+                                                   <button class="btn btn-default"
+                                                           type="button"
+                                                           ng-click="Application.MortageMLS=''">
+                                                       <i class="fa fa-times"></i>
+                                                   </button>
+                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Closing Date: <span class="'text-danger">*</span></label>
+                                        <input type="text"
+                                               class="form-control input-sm closingDate"
+                                               name="Application.ClosingDate"
+                                               ng-closingdate
+                                               required
+                                               ng-required="true"
+                                               data-view="1"
+                                               ng-model="Application.ClosingDate"
+                                               placeholder="Enter Closing date" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- #Purchase -->
+                        <!-- Pre-Approval -->
+                        <div ng-if="Application.MortagePurpose=='Pre-Approval'">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group" >
+                                        <label>Purchase Price:</label>
+                                        <input type="text"
+                                               class="form-control input-sm"
+                                               ng-currency
+                                               ng-makefocussecond
+                                               name="Application.MortagePurchaseNew"
+                                               ng-model="Application.MortagePurchaseNew" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Down Payment: <span class="text-danger">*</span></label>
+                                        <select class="form-control input-sm"
+                                                name="Application.PurchaseDownPercent"
+                                                ng-model="Application.PurchaseDownPercent"
+                                                required
+                                                ng-makefocusthird
+                                                ng-required="true"
+                                                ng-hide="Application.PurchaseDownPercent=='other'">
+                                            <option value="">Select Down Payment</option>
+                                            <option value="0.05">5%</option>
+                                            <option value="0.1">10%</option>
+                                            <option value="0.15">15%</option>
+                                            <option value="0.2">20%</option>
+                                            <option value="0.25">25%</option>
+                                            <option value="0.3">30%</option>
+                                            <option value="0.35">35%</option>
+                                            <option value="0.4">40%</option>
+                                            <option value="0.45">45%</option>
+                                            <option value="0.5">50%</option>
+                                            <option value="other">Enter Your Amount</option>
+                                        </select>
+
+                                        <div class="input-group input-group-sm"
+                                             ng-show="Application.PurchaseDownPercent=='other'">
+                                            <input type="text"
+                                                   class="form-control input-sm"
+                                                   name="Application.MortagePurchaseDownPayment"
+                                                   ng-model="Application.MortagePurchaseDownPayment"
+                                                   placeholder="Enter your amount"
+                                                   required
+                                                   ng-required="true"
+                                                   ng-limitations
+                                                   ng-currency/>
+                                                <span class="input-group-btn">
+                                                   <button class="btn btn-default"
+                                                           type="button"
+                                                           ng-click="Application.PurchaseDownPercent=''; Application.MortagePurchaseDownPayment=null">
+                                                       <i class="fa fa-times"></i>
+                                                   </button>
+                                                </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label>Down Payment Amount</label>
+                                        <input type="text"
+                                               class="form-control input-sm disabled"
+                                               ng-disabled="true"
+                                               name="Application.MortagePurchaseDownPayment"
+                                               ng-model="Application.MortagePurchaseDownPayment">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6"
+                                     ng-class="{ 'col-sm-12' : (Application.get('MortagePurpose') == 'Purchase' || Application.get('MortagePurpose') == 'Pre-Approval') && Application.has('MortageInsurance') && Application.get('MortageInsurance')>0 }">
+                                    <div class="form-group" >
+                                        <label>Mortgage Amount:</label>
+                                        <div ng-class="{ 'input-group' : (Application.get('MortagePurpose') == 'Purchase' || Application.get('MortagePurpose') == 'Pre-Approval') && Application.has('MortageInsurance') && Application.get('MortageInsurance')>0 }">
+                                            <input type="text"
+                                                   class="form-control input-sm"
+                                                   name="Application.PurchasePrice"
+                                                   ng-limitations
+                                                   ng-currency
+                                                   ng-makefocus
+                                                   required
+                                                   ng-required="true"
+                                                   ng-model="Application.PurchasePrice">
+                                            <span class="input-group-addon"
+                                                  ng-if="(Application.get('MortagePurpose') == 'Purchase' || Application.get('MortagePurpose') == 'Pre-Approval') && Application.has('MortageInsurance') && Application.get('MortageInsurance')>0"
+                                                  pop-over
+                                                  title="Help"
+                                                  data-placement="top"
+                                                  data-trigger="hover"
+                                                  data-content="Mortgage Insurance is Required in Canada for any mortgage with less than 20% down payment">
+                                                <small>+ {{Application.get('MortageInsurance') | noFractionCurrency}} Mortgage Insurance =
+                                                    <strong>{{ getFullMorgage() | noFractionCurrency }} Total Mortgage</strong></small>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group"
+                                         ng-hide="Application.MortageMLS=='Y'">
+                                        <label>Was this home listed on MLS?  <span class="text-danger">*</span></label>
+                                        <select class="form-control input-sm"
+                                                name="Application.MortageMLS"
+                                                required
+                                                ng-required="true"
+                                                ng-model="Application.MortageMLS">
+                                            <option value="">Select option</option>
+                                            <option value="Y">Yes</option>
+                                            <option value="N">No</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group"
+                                         ng-show="Application.MortageMLS=='Y'">
+                                        <label>Enter MLS Number: <span class="text-danger">*</span></label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text"
+                                                   class="form-control input-sm"
+                                                   name="Application.MortageMLSNumber"
+                                                   required
+                                                   ng-minlength="8"
+                                                   ng-maxlength="8"
+                                                   ng-mls
+                                                   ng-required="true"
+                                                   ng-model="Application.MortageMLSNumber"
+                                                   placeholder="Enter MLS Number" />
+                                                <span class="input-group-btn">
+                                                   <button class="btn btn-default"
+                                                           type="button"
+                                                           ng-click="Application.MortageMLS=''">
+                                                       <i class="fa fa-times"></i>
+                                                   </button>
+                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Closing Date: <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                               class="form-control input-sm closingDate"
+                                               name="Application.ClosingDate"
+                                               data-view="1"
+                                               required
+                                               ng-required="true"
+                                               ng-closingdate
+                                               ng-model="Application.ClosingDate"
+                                               placeholder="Enter Closing date" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- #Pre-Approval -->
+                        <!-- Refinance -->
+                        <div ng-if="Application.MortagePurpose=='Refinance'">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Estimated Value: <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                               class="form-control input-sm"
+                                               name="Application.AppraisedValue"
+                                               ng-model="Application.AppraisedValue"
+                                               ng-currency
+                                               required
+                                               ng-required="true"
+                                               placeholder="Enter Appraised Value" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Existing Mortgage Amount: <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                               class="form-control input-sm"
+                                               name="Application.ExistingMortageValueRefinance"
+                                               ng-model="Application.ExistingMortageValueRefinance"
+                                               ng-currency
+                                               required
+                                               ng-required="true"
+                                               placeholder="Enter existing mortgage value" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>New Mortgage Required: <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                               class="form-control input-sm"
+                                               name="Application.NewMortageValueRefinance"
+                                               ng-limitations2="Application.AppraisedValue"
+                                               ng-currency
+                                               required
+                                               ng-required="true"
+                                               ng-model="Application.NewMortageValueRefinance">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!--# Refinance -->
+                        <!-- Switch -->
+                        <div ng-if="Application.MortagePurpose=='Switch'">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Appraised Value: <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                               class="form-control input-sm"
+                                               ng-currency
+                                               required
+                                               ng-required="true"
+                                               name="Application.AppraisedValue"
+                                               ng-model="Application.AppraisedValue"
+                                               placeholder="Enter Appraised Value" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Existing Mortgage Amount: <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                               class="form-control input-sm"
+                                               name="Application.ExistingMortageValue"
+                                               ng-currency
+                                               required
+                                               ng-limitations
+                                               ng-required="true"
+                                               ng-model="Application.ExistingMortageValue">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Maturity Date: <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                               name="Application.MaturityDate"
+                                               ng-model="Application.MaturityDate"
+                                               ng-calendar
+                                               data-view="1"
+                                               required
+                                               ng-required="true"
+                                               class="form-control input-sm">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- #Switch -->
+                        <!-- Construction -->
+                        <div ng-if="Application.MortagePurpose=='Construction'">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Purchase Price / Estimated Completed Value: <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                               name="Application.PurchasePriceConstruction"
+                                               ng-model="Application.PurchasePriceConstruction"
+                                               ng-currency
+                                               ng-limitations
+                                               class="form-control input-sm"
+                                               required
+                                               ng-required="true"
+                                               placeholder="Enter purchase Value" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Do you have approved Permits? <span class="text-danger">*</span></label>
+                                        <select class="form-control input-sm"
+                                                name="Application.ApprovedPermits"
+                                                required
+                                                ng-required="true"
+                                                ng-model="Application.ApprovedPermits">
+                                            <option value="">Select option</option>
+                                            <option value="Y">Yes</option>
+                                            <option value="N">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Do you have a construction budget? <span class="text-danger">*</span></label>
+                                        <select class="form-control input-sm"
+                                                name="Application.ConstructionBudget"
+                                                required
+                                                ng-required="true"
+                                                ng-model="Application.ConstructionBudget">
+                                            <option value="">Select option</option>
+                                            <option value="Y">Yes</option>
+                                            <option value="N">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Total amount of funds required? <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                               class="form-control input-sm"
+                                               name="Application.TotalFoundsRequired"
+                                               ng-currency
+                                               ng-limitations
+                                               required
+                                               ng-required="true"
+                                               ng-model="Application.TotalFoundsRequired">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- #Construction -->
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Mortgage Type: <span class="text-danger">*</span></label>
+                                    <select class="form-control input-sm"
+                                            name="Application.MortageType"
+                                            required
+                                            ng-required="true"
+                                            ng-model="Application.MortageType">
+                                        <option value="">Select Mortage type</option>
+                                        <option value="Fixed">Fixed</option>
+                                        <option value="Variable">Variable</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>Mortgage Rate:</label>
+                                    <input class="form-control input-sm text-center"
+                                           name="Application.MortageRate"
+                                           ng-model="Application.MortageRate"
+                                           disabled />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Term: <span class="text-danger">*</span></label>
+                                    <select class="form-control input-sm"
+                                            name="Application.MortageTerm"
+                                            required
+                                            ng-required="true"
+                                            ng-model="Application.MortageTerm">
+                                        <option  value="1 Year Term">1 Year Term</option>
+                                        <option  value="2 Year Term">2 Year Term</option>
+                                        <option  value="3 Year Term">3 Year Term</option>
+                                        <option  value="4 Year Term">4 Year Term</option>
+                                        <option  value="5 Year Term">5 Year Term</option>
+                                        <option  value="7 Year Term">7 Year Term</option>
+                                        <option  value="10 Year Term">10 Year Term</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Amortization: <span class="text-danger">*</span></label>
+                                    <select class="form-control input-sm"
+                                            name="Application.MortageAmortization"
+                                            required
+                                            ng-required="true"
+                                            ng-model="Application.MortageAmortization">
+                                        <option value="">Select Amortization</option>
+                                        <option value="15 years">15 years</option>
+                                        <option value="20 years">20 years</option>
+                                        <option value="25 years">25 years</option>
+                                        <option value="30 years">30 years</option>
+                                        <option value="35 years">35 years</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Payment Schedule: <span class="text-danger">*</span></label>
+                                    <select class="form-control input-sm"
+                                            name="Application.PaymentSchedule"
+                                            required
+                                            ng-required="true"
+                                            ng-model="Application.PaymentSchedule">
+                                        <option value="">Select Payment Schedule</option>
+                                        <option value="Monthly">Monthly</option>
+                                        <option value="Bi-weekly">Bi-weekly</option>
+                                        <option value="Weekly">Weekly</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Do you own additional properties: <span class="text-danger">*</span></label>
+                                    <select class="form-control input-sm"
+                                            name="Application.MortageOwnProperties"
+                                            required
+                                            ng-required="true"
+                                            ng-model="Application.MortageOwnProperties">
+                                        <option value="">Select answer</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 text-right">
+                                <button class="btn btn-default pull-left"
+                                        ng-show="sessionUser != null"
+                                        ng-click="saveApp()"
+                                        ng-disabled="isAppSaving()">
+                                    <span ng-show="!isAppSaving()">Save<span ng-show="isSaved()">d <i class="fa fa-check-circle"></i></span></span>
+                                    <span ng-show="isAppSaving()">Saving <i class="fa fa-spin fa-spinner"></i></span>
+                                </button>
+                                    <button class="btn  btn-primary"
+                                            ng-click="increaseStep()">Next <i class="fa fa-angle-right"></i></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            <!-- #MORTAGE DETAILS -->
+
+        <!-- ABOUT YOU DETAILS -->
+
+        <div class="row box"
+             ng-show="isStep(1)">
+            <div class="col-xs-12">
+
+                <h2><i class="fa fa-user"></i> Personal information</h2>
+
+                <div class="row">
+
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Title:</label>
+                            <select class="form-control input-sm"
+                                    name="Application.Personal1Title"
+                                    ng-model="Application.Personal1Title">
+                                <option value="">Choose title</option>
+                                <option value="Mr.">Mr.</option>
+                                <option value="Mrs.">Mrs.</option>
+                                <option value="Miss.">Miss.</option>
+                                <option value="Ms.">Ms.</option>
+                                <option value="Dr">Dr.</option>
+                                <option value="Rev.">Rev.</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>First name: <span class="text-danger">*</span></label>
+                            <input type="text"
+                                   required
+                                   ng-required="true"
+                                   ng-minlength="2"
+                                   class="form-control input-sm"
+                                   name="Application.Personal1Fname"
+                                   ng-model="Application.Personal1Fname">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Last name: <span class="text-danger">*</span></label>
+                            <input type="text"
+                                   class="form-control input-sm"
+                                   required
+                                   ng-minlength="2"
+                                   ng-required="true"
+                                   name="Application.Personal1Lname"
+                                   ng-model="Application.Personal1Lname">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Initial:</label>
+                            <input type="text"
+                                   class="form-control input-sm"
+                                   name="Application.Personal1Initial"
+                                   ng-model="Application.Personal1Initial">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row"
+                     ng-form name="inAppForm"
+                     ng-hide="sessionUser!=null || !signUpEmail">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Email: <span class="text-danger">*</span></label>
+                            <input type="email"
+                                   class="form-control input-sm"
+                                   required
+                                   ng-unique
+                                   ng-change="Application.Personal1Email=email"
+                                   ng-required="true"
+                                   id="regWithEmail"
+                                   name="email"
+                                   ng-model="email" >
+                            <small class="text-danger text-block padding-left"
+                                   ng-show="!inAppForm.email.$error.unique && inAppForm.email.$invalid && !inAppForm.email.$pristine">Email is not correct</small>
+                            <small class="text-danger center-block padding-left" ng-show="inAppForm.email.$error.unique">Email already exist.</small>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Password: <span class="text-danger">*</span></label>
+                            <input type="password"
+                                   required
+                                   ng-required="true"
+                                   ng-minlength="6"
+                                   class="form-control input-sm"
+                                   name="apassword"
+                                   ng-model="apassword">
+                            <small class="text-danger padding-left" ng-show="inAppForm.apassword.$error.minlength && inAppForm.apassword.$pristine">At leas 6 charachters long.</small>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Repeat Password: <span class="text-danger">*</span></label>
+                            <input type="password"
+                                   required
+                                   ng-required="true"
+                                   ng-minlength="6"
+                                   id="repPass"
+                                   password-match="apassword"
+                                   class="form-control input-sm"
+                                   name="arpassword"
+                                   ng-model="arpassword">
+                            <small class="text-danger padding-left" ng-show="inAppForm.arpassword.$invalid && !inAppForm.arpassword.$pristine">Passwords don't match</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row"
+                     ng-hide="sessionUser!=null || signUpEmail">
+                    <div class="col-xs-12">
+                        <hr/>
+                        <h3>
+                            Create Your Account
+                        	<small ng-show="registerError" class="text-danger"><br/>Before you proceed please create your account with any of following methods</small>
+                        </h3>
+
+                    </div>
+                    <div class="col-sm-4">
+                        <button class="btn btn-block btn-sm btn-default" ng-click="signUpEmail=!signUpEmail" type="button"
+                                id="registerBtn"
+                                pop-over
+                                title="Register with email"
+                                data-placement="top"
+                                data-trigger="manual"
+                                data-content="Before you proced please register with email">
+                            Sign up with Email
+                        </button>
+                    </div>
+                    <div class="col-sm-4">
+                        <button class="btn btn-block btn-sm btn-facebook" ng-click="userHandler.signupFB()" type="button">
+                            <span ng-hide="errors.isLive('fbLoginExist')">Sign up with Facebook</span>
+                            <span ng-show="errors.isLive('fbLoginExist')"> <i class="fa fa-times-circle"></i> {{errors.get('fbLoginExist')}}</span>
+                        </button>
+                    </div>
+                    <div class="col-sm-4">
+                        <button class="btn btn-block btn-sm btn-google"
+                                ng-click='userHandler.registerGoogle()'>
+                            <span ng-hide="errors.isLive('googleLoginExist')">Sign up with Google</span>
+                            <span ng-show="errors.isLive('googleLoginExist')"><i class="fa fa-times-circle"></i> {{errors.get('googleLoginExist')}}</span>
+                        </button>
+                    </div>
+                    <div class="col-xs-12">
+                        <hr/>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Date of birth: <span class="text-danger">*</span> </label>
+                            <div class="row">
+                                <div class="col-sm-5 small-padding">
+                                    <select class="form-control input-sm"
+                                            required
+                                            ng-required="true"
+                                            name="Application.Personal1BirthMonth"
+                                            ng-model="Application.Personal1BirthMonth">
+                                        <option value="">Month</option>
+                                        <option value="01">Jan</option>
+                                        <option value="02">Feb</option>
+                                        <option value="03">Mar</option>
+                                        <option value="04">Apr</option>
+                                        <option value="05">May</option>
+                                        <option value="06">Jun</option>
+                                        <option value="07">Jul</option>
+                                        <option value="08">Aug</option>
+                                        <option value="09">Sep</option>
+                                        <option value="10">Oct</option>
+                                        <option value="11">Nov</option>
+                                        <option value="12">Dec</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4 small-padding">
+                                    <select class="form-control input-sm"
+                                            name="Application.Personal1BirthDay"
+                                            required
+                                            ng-required="true"
+                                            ng-model="Application.Personal1BirthDay">
+                                        <option value="">Day</option>
+                                        <option value="01">1</option>
+                                        <option value="02">2</option>
+                                        <option value="03">3</option>
+                                        <option value="04">4</option>
+                                        <option value="05">5</option>
+                                        <option value="06">6</option>
+                                        <option value="07">7</option>
+                                        <option value="08">8</option>
+                                        <option value="09">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+                                        <option value="25">25</option>
+                                        <option value="26">26</option>
+                                        <option value="27">27</option>
+                                        <option value="28">28</option>
+                                        <option value="29">29</option>
+                                        <option value="30">30</option>
+                                        <option value="31">31</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3 small-padding">
+                                    <select class="form-control input-sm"
+                                            name="Application.Personal1BirthYear"
+                                            required
+                                            ng-required="true"
+                                            ng-yearslimit
+                                            ng-model="Application.Personal1BirthYear">
+                                        <option value="">Year</option>
+                                        <option value="2014">2014</option>
+                                        <option value="2013">2013</option>
+                                        <option value="2012">2012</option>
+                                        <option value="2011">2011</option>
+                                        <option value="2010">2010</option>
+                                        <option value="2009">2009</option>
+                                        <option value="2008">2008</option>
+                                        <option value="2007">2007</option>
+                                        <option value="2006">2006</option>
+                                        <option value="2005">2005</option>
+                                        <option value="2004">2004</option>
+                                        <option value="2003">2003</option>
+                                        <option value="2002">2002</option>
+                                        <option value="2001">2001</option>
+                                        <option value="2000">2000</option>
+                                        <option value="1999">1999</option>
+                                        <option value="1998">1998</option>
+                                        <option value="1997">1997</option>
+                                        <option value="1996">1996</option>
+                                        <option value="1995">1995</option>
+                                        <option value="1994">1994</option>
+                                        <option value="1993">1993</option>
+                                        <option value="1992">1992</option>
+                                        <option value="1991">1991</option>
+                                        <option value="1990">1990</option>
+                                        <option value="1989">1989</option>
+                                        <option value="1988">1988</option>
+                                        <option value="1987">1987</option>
+                                        <option value="1986">1986</option>
+                                        <option value="1985">1985</option>
+                                        <option value="1984">1984</option>
+                                        <option value="1983">1983</option>
+                                        <option value="1982">1982</option>
+                                        <option value="1981">1981</option>
+                                        <option value="1980">1980</option>
+                                        <option value="1979">1979</option>
+                                        <option value="1978">1978</option>
+                                        <option value="1977">1977</option>
+                                        <option value="1976">1976</option>
+                                        <option value="1975">1975</option>
+                                        <option value="1974">1974</option>
+                                        <option value="1973">1973</option>
+                                        <option value="1972">1972</option>
+                                        <option value="1971">1971</option>
+                                        <option value="1970">1970</option>
+                                        <option value="1969">1969</option>
+                                        <option value="1968">1968</option>
+                                        <option value="1967">1967</option>
+                                        <option value="1966">1966</option>
+                                        <option value="1965">1965</option>
+                                        <option value="1964">1964</option>
+                                        <option value="1963">1963</option>
+                                        <option value="1962">1962</option>
+                                        <option value="1961">1961</option>
+                                        <option value="1960">1960</option>
+                                        <option value="1959">1959</option>
+                                        <option value="1958">1958</option>
+                                        <option value="1957">1957</option>
+                                        <option value="1956">1956</option>
+                                        <option value="1955">1955</option>
+                                        <option value="1954">1954</option>
+                                        <option value="1953">1953</option>
+                                        <option value="1952">1952</option>
+                                        <option value="1951">1951</option>
+                                        <option value="1950">1950</option>
+                                        <option value="1949">1949</option>
+                                        <option value="1948">1948</option>
+                                        <option value="1947">1947</option>
+                                        <option value="1946">1946</option>
+                                        <option value="1945">1945</option>
+                                        <option value="1944">1944</option>
+                                        <option value="1943">1943</option>
+                                        <option value="1942">1942</option>
+                                        <option value="1941">1941</option>
+                                        <option value="1940">1940</option>
+                                        <option value="1939">1939</option>
+                                        <option value="1938">1938</option>
+                                        <option value="1937">1937</option>
+                                        <option value="1936">1936</option>
+                                        <option value="1935">1935</option>
+                                        <option value="1934">1934</option>
+                                        <option value="1933">1933</option>
+                                        <option value="1932">1932</option>
+                                        <option value="1931">1931</option>
+                                        <option value="1930">1930</option>
+                                        <option value="1929">1929</option>
+                                        <option value="1928">1928</option>
+                                        <option value="1927">1927</option>
+                                        <option value="1926">1926</option>
+                                        <option value="1925">1925</option>
+                                        <option value="1924">1924</option>
+                                        <option value="1923">1923</option>
+                                        <option value="1922">1922</option>
+                                        <option value="1921">1921</option>
+                                        <option value="1920">1920</option>
+                                        <option value="1919">1919</option>
+                                        <option value="1918">1918</option>
+                                        <option value="1917">1917</option>
+                                        <option value="1916">1916</option>
+                                        <option value="1915">1915</option>
+                                        <option value="1914">1914</option>
+                                        <option value="1913">1913</option>
+                                        <option value="1912">1912</option>
+                                        <option value="1911">1911</option>
+                                        <option value="1910">1910</option>
+                                        <option value="1909">1909</option>
+                                        <option value="1908">1908</option>
+                                        <option value="1907">1907</option>
+                                        <option value="1906">1906</option>
+                                        <option value="1905">1905</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>SIN#:
+                                <a href="#"
+                                   prevent-def
+                                   pop-over
+                                   title="SIN# Help"
+                                   data-placement="top"
+                                   data-trigger="hover"
+                                   data-content="Your Social Insurance Number is required by all mortgage lenders and used to obtain a valid credit bureau">?</a>
+                            </label>
+                            <input type="text"
+                                   ng-sin
+                                   ng-minlength="11"
+                                   ng-maxlength="11"
+                                   class="form-control input-sm"
+                                   name="Application.Personal1SIN"
+                                   ng-model="Application.Personal1SIN">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Home Phone#: <span class="text-danger">*</span></label>
+                            <div class="form-group form-group-sm">
+                                <input type="text"
+                                       class="form-control input-sm"
+                                       name="Application.Personal1HomePhone"
+                                       required
+                                       ng-phone
+                                       ng-minlength="10"
+                                       ng-maxlength="14"
+                                       ng-model="Application.Personal1HomePhone">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Work Phone#:</label>
+                            <div class="form-group form-group-sm">
+                                <input type="text"
+                                       class="form-control input-sm"
+                                       ng-phone
+                                       ng-minlength="10"
+                                       ng-maxlength="14"
+                                       name="Application.Personal1WorkPhone"
+                                       ng-model="Application.Personal1WorkPhone">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4"
+                         ng-show="sessionUser!=null">
+                        <div class="form-group">
+                            <label>Email: <span class="text-danger">*</span></label>
+                            <input type="email"
+                                   class="form-control input-sm"
+                                   required
+                                   ng-required="true"
+                                   name="Application.Personal1Email"
+                                   ng-model="Application.Personal1Email" >
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Preferred method of communication:</label>
+                            <select class="form-control input-sm"
+                                    name="Application.Personal1Communication"
+                                    ng-model="Application.Personal1Communication">
+                                <option value="">Select option</option>
+                                <option value="Phone">Phone</option>
+                                <option value="Email">E-mail</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12"
+                         ng-show="Application.Personal1Communication=='Phone'">
+                        <div class="form-group">
+                            <label>When would you like us to contact you?</label>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <select class="form-control input-sm"
+                                            name="Application.Personal1CommunicationDays"
+                                            ng-model="Application.Personal1CommunicationDays">
+                                        <option value="">Select option</option>
+                                        <option value="Weekdays" selected ng-selected="true">Weekdays</option>
+                                        <option value="Weekends">Weekends</option>
+                                        <option value="Either">Either</option>
+                                    </select>
+                                </div>
+                                <div class="col-xs-6">
+                                    <select class="form-control input-sm"
+                                            name="Application.Personal1CommunicationTime"
+                                            ng-model="Application.Personal1CommunicationTime">
+                                        <option value="">Select option</option>
+                                        <option value="Mornings" selected ng-selected="true">Mornings</option>
+                                        <option value="Afternoon">Afternoon</option>
+                                        <option value="Evening">Evening</option>
+                                        <option value="Either">Either</option>A
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 text-right">
+                        <button class="btn  btn-default pull-left"
+                                ng-show="sessionUser != null"
+                                ng-click="saveApp()"
+                                ng-disabled="isAppSaving()">
+                            <span ng-show="!isAppSaving()">Save<span ng-show="isSaved()">d <i class="fa fa-check-circle"></i></span></span>
+                            <span ng-show="isAppSaving()">Saving <i class="fa fa-spin fa-spinner"></i></span>
+                        </button>
+                        <button class="btn  btn-default"
+                                ng-click="decreaseStep()"><i class="fa fa-angle-left"></i> Back</button>
+                        <button class="btn  btn-primary"
+                                ng-click="increaseStep()">Next <i class="fa fa-angle-right"></i></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row box"
+             ng-show="isStep(2)">
+            <div class="col-xs-12">
+
+                <h2><i class="fa fa-map-marker"></i> Current Living Address</h2>
+
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Address: <span class="text-danger">*</span></label>
+                            <input type="text"
+                                   required
+                                   ng-required="true"
+                                   placeholder="Address"
+                                   ng-minlength="3"
+                                   class="form-control input-sm"
+                                   name="Application.Personal1Street1"
+                                   ng-model="Application.Personal1Street1">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+
+                        <div class="form-group top-mar-form">
+                            <input type="text"
+                                   class="form-control input-sm"
+                                   name="Application.Personal1Street2"
+                                   placeholder="Address 2"
+                                   ng-minlength="3"
+                                   ng-model="Application.Personal1Street2">
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+
+                        <div class="form-group">
+                            <label>City/Town: <span class="text-danger">*</span></label>
+                            <input type="text"
+                                   class="form-control input-sm"
+                                   required
+                                   ng-minlength="3"
+                                   ng-required="true"
+                                   name="Application.Personal1City"
+                                   ng-model="Application.Personal1City">
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Province: <span class="text-danger">*</span></label>
+                            <select class="form-control input-sm"
+                                    required
+                                    ng-required="true"
+                                    name="Application.Personal1Province"
+                                    ng-model="Application.Personal1Province">
+                                <option value="">Choose province</option>
+                                <option value="AB">Alberta</option>
+                                <option value="BC">British  Columbia</option>
+                                <option value="MB">Manitoba</option>
+                                <option value="NB">New Brunswick</option>
+                                <option value="NF">Newfoundland</option>
+                                <option value="NS">Nova Scotia</option>
+                                <option value="NT">Northwest Territories</option>
+                                <option value="NU">Nunavut</option>
+                                <option value="ON">Ontario</option>
+                                <option value="QC">Quebec</option>
+                                <option value="PE">P.E.I.</option>
+                                <option value="SK">Saskatchewan</option>
+                                <option value="YK">Yukon</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Postal code: <span class="text-danger">*</span></label>
+                            <input type="text"
+                                   class="form-control input-sm"
+                                   required
+                                   ng-minlength="7"
+                                   ng-maxlength="7"
+                                   ng-postal
+                                   ng-required="true"
+                                   name="Application.Personal1Postal"
+                                   ng-model="Application.Personal1Postal">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Residental status: <span class="text-danger">*</span></label>
+                            <select class="form-control input-sm"
+                                    name="Application.Personal1ResidentalStatus"
+                                    required
+                                    ng-required="true"
+                                    ng-model="Application.Personal1ResidentalStatus">
+                                <option value="">Choose</option>
+                                <option value="Own">Own</option>
+                                <option value="Rent">Rent</option>
+                                <option value="Live with parents">Live with parents</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4"
+                         ng-show="Application.Personal1ResidentalStatus=='Own'">
+                        <div class="form-group">
+                            <label>Monthly Mortgage Payment</label>
+                            <input type="text"
+                                   ng-currency
+                                   class="form-control input-sm"
+                                   name="Application.Personal1MonthlyMortgagePayment"
+                                   ng-model="Application.Personal1MonthlyMortgagePayment">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4"
+                         ng-show="Application.Personal1ResidentalStatus=='Rent' || Application.Personal1ResidentalStatus=='Live with parents' || Application.Personal1ResidentalStatus=='Other'">
+                        <div class="form-group">
+                            <label>Monthly rent:</label>
+                            <input type="text"
+                                   ng-currency
+                                   class="form-control input-sm"
+                                   name="Application.Personal1MonthlyRent"
+                                   ng-model="Application.Personal1MonthlyRent">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 text-right">
+                        <button class="btn  btn-default pull-left"
+                                ng-show="sessionUser != null"
+                                ng-click="saveApp()"
+                                ng-disabled="isAppSaving()">
+                            <span ng-show="!isAppSaving()">Save<span ng-show="isSaved()">d <i class="fa fa-check-circle"></i></span></span>
+                            <span ng-show="isAppSaving()">Saving <i class="fa fa-spin fa-spinner"></i></span>
+                        </button>
+                        <button class="btn  btn-default"
+                                ng-click="decreaseStep()"><i class="fa fa-angle-left"></i> Back</button>
+                        <button class="btn  btn-primary"
+                                ng-click="increaseStep()">Next <i class="fa fa-angle-right"></i></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row box"
+             ng-show="isStep(3)">
+            <div class="col-xs-12">
+
+                <h2><i class="fa fa-building-o"></i> Employment Information</h2>
+
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Name of Company:</label>
+                            <input type="text" class="form-control input-sm"
+                                   name="Application.Personal1CompanyName"
+                                   ng-model="Application.Personal1CompanyName"/>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Are you self employed: <span class="text-danger">*</span></label>
+                            <select class="form-control input-sm"
+                                    required
+                                    ng-required="true"
+                                    name="Application.Personal1SelfEmployed"
+                                    ng-model="Application.Personal1SelfEmployed">
+                                <option value="">Choose</option>
+                                <option value="Y">Yes</option>
+                                <option value="N">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Annual Income: <span class="text-danger">*</span> </label>
+                            <input type="text" class="form-control input-sm"
+                                   name="Application.Personal1Income"
+                                   ng-currency
+                                   required
+                                   ng-minlength="2"
+                                   ng-required="true"
+                                   ng-model="Application.Personal1Income"/>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Other/Additional Income:</label>
+                            <input type="text" class="form-control input-sm"
+                                   name="Application.Personal1IncomeOther"
+                                   ng-currency
+                                   ng-model="Application.Personal1IncomeOther"/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 text-right">
+                        <button class="btn  btn-default pull-left"
+                                ng-show="sessionUser != null"
+                                ng-click="saveApp()"
+                                ng-disabled="isAppSaving()">
+                            <span ng-show="!isAppSaving()">Save<span ng-show="isSaved()">d <i class="fa fa-check-circle"></i></span></span>
+                            <span ng-show="isAppSaving()">Saving <i class="fa fa-spin fa-spinner"></i></span>
+                        </button>
+                        <button class="btn  btn-default"
+                                ng-click="decreaseStep()"><i class="fa fa-angle-left"></i> Back</button>
+                        <button class="btn  btn-primary"
+                                ng-click="increaseStep()">Next <i class="fa fa-angle-right"></i></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- #ABOUT YOU DETAILS -->
+
+        <!-- ABOUT YOU 2 -->
+
+        <div class="row box"
+             ng-show="isStep(4)">
+                <div class="col-xs-12">
+
+                    <div class="text-center inner-padding"
+                         ng-show="!Application.Application2">
+                        <h2 class="cursor">Would you like to add a second applicant?</h2>
+                        <button class="btn btn-default "
+                                type="button"
+                                ng-click="Application.Application2=true">
+                            <span ng-show="!Application.Application2"><i class="fa fa-plus"></i> Add application</span>
+                        </button>
+                    </div>
+
+                    <div ng-show="Application.Application2">
+                        <h2><i class="fa fa-user"></i> Personal information</h2>
+
+                        <div class="row">
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>Title:</label>
+                                    <select class="form-control input-sm"
+                                            name="Application.Personal2Title"
+                                            ng-model="Application.Personal2Title">
+                                        <option value="">Choose title</option>
+                                        <option value="Mr.">Mr.</option>
+                                        <option value="Mrs.">Mrs.</option>
+                                        <option value="Miss.">Miss.</option>
+                                        <option value="Ms.">Ms.</option>
+                                        <option value="Dr">Dr.</option>
+                                        <option value="Rev.">Rev.</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>First name: <span class="text-danger">*</span> </label>
+                                    <input type="text"
+                                           class="form-control input-sm"
+                                           required
+                                           ng-minlength="2"
+                                           ng-required="true"
+                                           name="Application.Personal2Fname"
+                                           ng-model="Application.Personal2Fname">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Last name: <span class="text-danger">*</span></label>
+                                    <input type="text"
+                                           class="form-control input-sm"
+                                           required
+                                           ng-required="true"
+                                           ng-minlength="2"
+                                           name="Application.Personal2Lname"
+                                           ng-model="Application.Personal2Lname">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>Initial:</label>
+                                    <input type="text"
+                                           class="form-control input-sm"
+                                           name="Application.Personal2Initial"
+                                           ng-model="Application.Personal2Initial">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Date of birth:</label>
+                                    <div class="row">
+                                        <div class="col-sm-5 small-padding">
+                                            <select class="form-control input-sm"
+                                                    name="Application.Personal2BirthMonth"
+                                                    ng-model="Application.Personal2BirthMonth">
+                                                <option value="">Month</option>
+                                                <option value="01">Jan</option>
+                                                <option value="02">Feb</option>
+                                                <option value="03">Mar</option>
+                                                <option value="04">Apr</option>
+                                                <option value="05">May</option>
+                                                <option value="06">Jun</option>
+                                                <option value="07">Jul</option>
+                                                <option value="08">Aug</option>
+                                                <option value="09">Sep</option>
+                                                <option value="10">Oct</option>
+                                                <option value="11">Nov</option>
+                                                <option value="12">Dec</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4 small-padding">
+                                            <select class="form-control input-sm"
+                                                    name="Application.Personal2BirthDay"
+                                                    ng-model="Application.Personal2BirthDay">
+                                                <option value="">Day</option>
+                                                <option value="01">1</option>
+                                                <option value="02">2</option>
+                                                <option value="03">3</option>
+                                                <option value="04">4</option>
+                                                <option value="05">5</option>
+                                                <option value="06">6</option>
+                                                <option value="07">7</option>
+                                                <option value="08">8</option>
+                                                <option value="09">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                                <option value="13">13</option>
+                                                <option value="14">14</option>
+                                                <option value="15">15</option>
+                                                <option value="16">16</option>
+                                                <option value="17">17</option>
+                                                <option value="18">18</option>
+                                                <option value="19">19</option>
+                                                <option value="20">20</option>
+                                                <option value="21">21</option>
+                                                <option value="22">22</option>
+                                                <option value="23">23</option>
+                                                <option value="24">24</option>
+                                                <option value="25">25</option>
+                                                <option value="26">26</option>
+                                                <option value="27">27</option>
+                                                <option value="28">28</option>
+                                                <option value="29">29</option>
+                                                <option value="30">30</option>
+                                                <option value="31">31</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3 small-padding">
+                                            <select class="form-control input-sm"
+                                                    name="Application.Personal2BirthYear"
+                                                    ng-yearslimit
+                                                    ng-model="Application.Personal2BirthYear">
+                                                <option value="">Year</option>
+                                                <option value="2014">2014</option>
+                                                <option value="2013">2013</option>
+                                                <option value="2012">2012</option>
+                                                <option value="2011">2011</option>
+                                                <option value="2010">2010</option>
+                                                <option value="2009">2009</option>
+                                                <option value="2008">2008</option>
+                                                <option value="2007">2007</option>
+                                                <option value="2006">2006</option>
+                                                <option value="2005">2005</option>
+                                                <option value="2004">2004</option>
+                                                <option value="2003">2003</option>
+                                                <option value="2002">2002</option>
+                                                <option value="2001">2001</option>
+                                                <option value="2000">2000</option>
+                                                <option value="1999">1999</option>
+                                                <option value="1998">1998</option>
+                                                <option value="1997">1997</option>
+                                                <option value="1996">1996</option>
+                                                <option value="1995">1995</option>
+                                                <option value="1994">1994</option>
+                                                <option value="1993">1993</option>
+                                                <option value="1992">1992</option>
+                                                <option value="1991">1991</option>
+                                                <option value="1990">1990</option>
+                                                <option value="1989">1989</option>
+                                                <option value="1988">1988</option>
+                                                <option value="1987">1987</option>
+                                                <option value="1986">1986</option>
+                                                <option value="1985">1985</option>
+                                                <option value="1984">1984</option>
+                                                <option value="1983">1983</option>
+                                                <option value="1982">1982</option>
+                                                <option value="1981">1981</option>
+                                                <option value="1980">1980</option>
+                                                <option value="1979">1979</option>
+                                                <option value="1978">1978</option>
+                                                <option value="1977">1977</option>
+                                                <option value="1976">1976</option>
+                                                <option value="1975">1975</option>
+                                                <option value="1974">1974</option>
+                                                <option value="1973">1973</option>
+                                                <option value="1972">1972</option>
+                                                <option value="1971">1971</option>
+                                                <option value="1970">1970</option>
+                                                <option value="1969">1969</option>
+                                                <option value="1968">1968</option>
+                                                <option value="1967">1967</option>
+                                                <option value="1966">1966</option>
+                                                <option value="1965">1965</option>
+                                                <option value="1964">1964</option>
+                                                <option value="1963">1963</option>
+                                                <option value="1962">1962</option>
+                                                <option value="1961">1961</option>
+                                                <option value="1960">1960</option>
+                                                <option value="1959">1959</option>
+                                                <option value="1958">1958</option>
+                                                <option value="1957">1957</option>
+                                                <option value="1956">1956</option>
+                                                <option value="1955">1955</option>
+                                                <option value="1954">1954</option>
+                                                <option value="1953">1953</option>
+                                                <option value="1952">1952</option>
+                                                <option value="1951">1951</option>
+                                                <option value="1950">1950</option>
+                                                <option value="1949">1949</option>
+                                                <option value="1948">1948</option>
+                                                <option value="1947">1947</option>
+                                                <option value="1946">1946</option>
+                                                <option value="1945">1945</option>
+                                                <option value="1944">1944</option>
+                                                <option value="1943">1943</option>
+                                                <option value="1942">1942</option>
+                                                <option value="1941">1941</option>
+                                                <option value="1940">1940</option>
+                                                <option value="1939">1939</option>
+                                                <option value="1938">1938</option>
+                                                <option value="1937">1937</option>
+                                                <option value="1936">1936</option>
+                                                <option value="1935">1935</option>
+                                                <option value="1934">1934</option>
+                                                <option value="1933">1933</option>
+                                                <option value="1932">1932</option>
+                                                <option value="1931">1931</option>
+                                                <option value="1930">1930</option>
+                                                <option value="1929">1929</option>
+                                                <option value="1928">1928</option>
+                                                <option value="1927">1927</option>
+                                                <option value="1926">1926</option>
+                                                <option value="1925">1925</option>
+                                                <option value="1924">1924</option>
+                                                <option value="1923">1923</option>
+                                                <option value="1922">1922</option>
+                                                <option value="1921">1921</option>
+                                                <option value="1920">1920</option>
+                                                <option value="1919">1919</option>
+                                                <option value="1918">1918</option>
+                                                <option value="1917">1917</option>
+                                                <option value="1916">1916</option>
+                                                <option value="1915">1915</option>
+                                                <option value="1914">1914</option>
+                                                <option value="1913">1913</option>
+                                                <option value="1912">1912</option>
+                                                <option value="1911">1911</option>
+                                                <option value="1910">1910</option>
+                                                <option value="1909">1909</option>
+                                                <option value="1908">1908</option>
+                                                <option value="1907">1907</option>
+                                                <option value="1906">1906</option>
+                                                <option value="1905">1905</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>SIN#: <a href="#"
+                                                    prevent-def
+                                                    pop-over
+                                                    title="SIN# Help"
+                                                    data-placement="top"
+                                                    data-trigger="hover"
+                                                    data-content="Your Social Insurance Number is required by all mortgage lenders and used to obtain a valid credit bureau">?</a></label>
+                                    <input type="text"
+                                           class="form-control input-sm"
+                                           ng-sin
+                                           ng-minlength="11"
+                                           ng-maxlength="11"
+                                           name="Application.Personal2SIN"
+                                           ng-model="Application.Personal2SIN">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Home Phone#:</label>
+                                    <div class="form-group form-group-sm">
+                                        <input type="text"
+                                               class="form-control input-sm"
+                                               ng-phone
+                                               name="Application.Personal2HomePhone"
+                                               ng-model="Application.Personal2HomePhone">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Work Phone#:</label>
+                                    <div class="form-group form-group-sm">
+                                        <input type="text"
+                                               class="form-control input-sm"
+                                               ng-phone
+                                               name="Application.Personal2WorkPhone"
+                                               ng-model="Application.Personal2WorkPhone">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Email: <span class="text-danger">*</span> </label>
+                                    <input type="email"
+                                           class="form-control input-sm"
+                                           name="Application.Personal2Email"
+                                           ng-model="Application.Personal2Email">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-5">
+                                <div class="form-group">
+                                    <label>Relationship to Primary Applicant: <span class="text-danger">*</span> </label>
+                                    <select class="form-control input-sm"
+                                            name="Application.Personal2Relationship"
+                                            required
+                                            ng-required="true"
+                                            ng-model="Application.Personal2Relationship">
+                                        <option value="">Relationship</option>
+                                        <option value="Spouse">Spouse</option>
+                                        <option value="Sibling">Sibling</option>
+                                        <option value="Parent">Parent</option>
+                                        <option value="Child">Child</option>
+                                        <option value="Friend">Friend</option>
+                                        <option value="Common-law">Common-law</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 text-right">
+                            <button class="btn  btn-default pull-left"
+                                    ng-show="sessionUser != null"
+                                    ng-click="saveApp()"
+                                    ng-disabled="isAppSaving()">
+                                <span ng-show="!isAppSaving()">Save<span ng-show="isSaved()">d <i class="fa fa-check-circle"></i></span></span>
+                                <span ng-show="isAppSaving()">Saving <i class="fa fa-spin fa-spinner"></i></span>
+                            </button>
+                            <button class="btn  btn-default"
+                                    ng-click="decreaseStep()"><i class="fa fa-angle-left"></i> Back</button>
+                            <button class="btn  btn-primary"
+                                    ng-show="Application.Application2"
+                                    ng-click="increaseStep()">Next <i class="fa fa-angle-right"></i></button>
+                            <button class="btn  btn-primary"
+                                    ng-show="!Application.Application2"
+                                    ng-click="setStep(7)">Skip <i class="fa fa-angle-right"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        <div class="row box"
+             ng-show="isStep(5)">
+
+            <div class="col-xs-12">
+
+                <h2><i class="fa fa-map-marker"></i> Current Living Address</h2>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button class="btn btn-primary btn-sm pull-right" ng-click="copyAddresss()"><i class="fa fa-map-marker"></i> Same as primary applicant</button>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Address: <span class="text-danger">*</span></label>
+                            <input type="text"
+                                   class="form-control input-sm"
+                                   required
+                                   ng-minlength="3"
+                                   ng-required="true"
+                                   name="Application.Personal2Street1"
+                                   placeholder="Address 1"
+                                   ng-model="Application.Personal2Street1">
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group top-mar-form">
+                            <input type="text"
+                                   class="form-control input-sm"
+                                   name="Application.Personal2Street2"
+                                   placeholder="Address 2"
+                                   ng-model="Application.Personal2Street2">
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                    <div class="form-group">
+
+                        <label>City/Town: <span class="text-danger">*</span></label>
+                        <input type="text"
+                               class="form-control input-sm"
+                               name="Application.Personal2City"
+                               required
+                               ng-minlength="3"
+                               ng-required="true"
+                               ng-model="Application.Personal2City">
+
+                    </div>
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Province: <span class="text-danger">*</span></label>
+                            <select class="form-control input-sm"
+                                    name="Application.Personal2Province"
+                                    required
+                                    ng-required="true"
+                                    ng-model="Application.Personal2Province">
+                                <option value="">Choose province</option>
+                                <option value="AB">Alberta</option>
+                                <option value="BC">British  Columbia</option>
+                                <option value="MB">Manitoba</option>
+                                <option value="NB">New Brunswick</option>
+                                <option value="NF">Newfoundland</option>
+                                <option value="NS">Nova Scotia</option>
+                                <option value="NT">Northwest Territories</option>
+                                <option value="NU">Nunavut</option>
+                                <option value="ON">Ontario</option>
+                                <option value="QC">Quebec</option>
+                                <option value="PE">P.E.I.</option>
+                                <option value="SK">Saskatchewan</option>
+                                <option value="YK">Yukon</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Postal code: <span class="text-danger">*</span></label>
+                            <input type="text"
+                                   class="form-control input-sm"
+                                   name="Application.Personal2Postal"
+                                   required
+                                   ng-postal
+                                   ng-minlength="7"
+                                   ng-maxlength="7"
+                                   ng-required="true"
+                                   ng-model="Application.Personal2Postal">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Residental status:</label>
+                            <select class="form-control input-sm"
+                                    name="Application.Personal2ResidentalStatus"
+                                    required
+                                    ng-required="true"
+                                    ng-model="Application.Personal2ResidentalStatus">
+                                <option value="">Choose</option>
+                                <option value="Own">Own</option>
+                                <option value="Rent">Rent</option>
+                                <option value="Live with parents">Live with parents</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4"
+                         ng-show="Application.Personal2ResidentalStatus=='Own'">
+                        <div class="form-group">
+                            <label>Monthly Mortgage Payment</label>
+                            <input type="text"
+                                   ng-currency
+                                   class="form-control input-sm"
+                                   name="Application.Personal2MonthlyMortgagePayment"
+                                   ng-model="Application.Personal2MonthlyMortgagePayment">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4"
+                         ng-show="Application.Personal2ResidentalStatus=='Rent' || Application.Personal2ResidentalStatus=='Live with parents' || Application.Personal2ResidentalStatus=='Other'">
+                        <div class="form-group">
+                            <label>Monthly rent:</label>
+                            <input type="text"
+                                   ng-currency
+                                   class="form-control input-sm"
+                                   name="Application.Personal2MonthlyRent"
+                                   ng-model="Application.Personal2MonthlyRent">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 text-right">
+                        <button class="btn  btn-default pull-left"
+                                ng-show="sessionUser != null"
+                                ng-click="saveApp()"
+                                ng-disabled="isAppSaving()">
+                            <span ng-show="!isAppSaving()">Save<span ng-show="isSaved()">d <i class="fa fa-check-circle"></i></span></span>
+                            <span ng-show="isAppSaving()">Saving <i class="fa fa-spin fa-spinner"></i></span>
+                        </button>
+                        <button class="btn  btn-default"
+                                ng-click="decreaseStep()"><i class="fa fa-angle-left"></i> Back</button>
+                        <button class="btn  btn-primary"
+                                ng-click="increaseStep()">Next <i class="fa fa-angle-right"></i></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row box"
+                     ng-show="isStep(6)">
+
+                    <div class="col-xs-12">
+                        <h2><i class="fa fa-building-o"></i> Employment Information</h2>
+
+                            <div class="row">
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Name of Company:</label>
+                                        <input type="text" class="form-control input-sm"
+                                               name="Application.Personal2CompanyName"
+                                               ng-model="Application.Personal2CompanyName"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Are you self employed: <span class="text-danger">*</span></label>
+                                        <select class="form-control input-sm"
+                                                required
+                                                ng-required="true"
+                                                name="Application.Personal2SelfEmployed"
+                                                ng-model="Application.Personal2SelfEmployed">
+                                            <option value="">Choose</option>
+                                            <option value="01">Yes</option>
+                                            <option value="02">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Annual Income: <span class="text-danger">*</span> </label>
+                                        <input type="text" class="form-control input-sm"
+                                               name="Application.Personal2Income"
+                                               ng-currency
+                                               required
+                                               ng-minlength="2"
+                                               ng-required="true"
+                                               ng-model="Application.Personal2Income"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Other/Additional Income:</label>
+                                        <input type="text" class="form-control input-sm"
+                                               name="Application.Personal2IncomeOther"
+                                               ng-currency
+                                               ng-model="Application.Personal2IncomeOther"/>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 text-right">
+                                <button class="btn  btn-default pull-left"
+                                        ng-show="sessionUser != null"
+                                        ng-click="saveApp()"
+                                        ng-disabled="isAppSaving()">
+                                    <span ng-show="!isAppSaving()">Save<span ng-show="isSaved()">d <i class="fa fa-check-circle"></i></span></span>
+                                    <span ng-show="isAppSaving()">Saving <i class="fa fa-spin fa-spinner"></i></span>
+                                </button>
+                                <button class="btn  btn-default"
+                                        ng-click="decreaseStep()"><i class="fa fa-angle-left"></i> Back</button>
+                                <button class="btn  btn-primary"
+                                        ng-click="increaseStep()">Next <i class="fa fa-angle-right"></i></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+        <div class="row box"
+                     ng-show="isStep(7)">
+
+                    <div class="col-xs-12">
+
+                        <h2><i class="fa fa-home"></i> Property Being Financed</h2>
+
+                        <h3  pop-over
+                             title="Help"
+                             data-placement="top"
+                             data-trigger="hover"
+                             data-content="Tell us about the property we are financing"
+                             style="display: inline-block">
+                            Subject Property Information
+                        </h3><br/>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <button class="btn btn-primary btn-sm pull-right" ng-click="copyAddresss2()"><i class="fa fa-map-marker"></i> Same as current address</button>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Address: <span class="text-danger">*</span></label>
+                                    <input type="text"
+                                           class="form-control input-sm"
+                                           required
+                                           ng-minlength="3"
+                                           ng-required="true"
+                                           name="Application.PropertyStreet1"
+                                           ng-model="Application.PropertyStreet1">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group top-mar-form">
+                                    <input type="text"
+                                           class="form-control input-sm"
+                                           name="Application.PropertyStreet2"
+                                           placeholder="Address 2"
+                                           ng-model="Application.PropertyStreet2">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>City/Town: <span class="text-danger">*</span></label>
+                                <input type="text"
+                                       class="form-control input-sm"
+                                       name="Application.PropertyCity"
+                                       required
+                                       ng-minlength="3"
+                                       ng-required="true"
+                                       ng-model="Application.PropertyCity">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Province: <span class="text-danger">*</span></label>
+                                    <select class="form-control input-sm"
+                                            name="Application.PropertyProvince"
+                                            required
+                                            ng-required="true"
+                                            ng-model="Application.PropertyProvince">
+                                        <option value="">Choose province</option>
+                                        <option value="AB">Alberta</option>
+                                        <option value="BC">British  Columbia</option>
+                                        <option value="MB">Manitoba</option>
+                                        <option value="NB">New Brunswick</option>
+                                        <option value="NF">Newfoundland</option>
+                                        <option value="NS">Nova Scotia</option>
+                                        <option value="NT">Northwest Territories</option>
+                                        <option value="NU">Nunavut</option>
+                                        <option value="ON">Ontario</option>
+                                        <option value="QC">Quebec</option>
+                                        <option value="PE">P.E.I.</option>
+                                        <option value="SK">Saskatchewan</option>
+                                        <option value="YK">Yukon</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Postal code: <span class="text-danger">*</span></label>
+                                <input type="text"
+                                       class="form-control input-sm"
+                                       required
+                                       ng-minlength="7"
+                                       ng-maxlength="7"
+                                       ng-postal
+                                       ng-required="true"
+                                       name="Application.PropertyPostal"
+                                       ng-model="Application.PropertyPostal">
+                            </div>
+                        </div>
+                    </div>
+
+
+                        <h3>Property Description</h3>
+
+                        <div class="row">
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Property Type: </label>
+                                    <select class="form-control input-sm"
+                                            name="Application.PropertyType"
+                                            ng-model="Application.PropertyType">
+                                        <option value="">Choose</option>
+                                        <option value="Detached">Detached</option>
+                                        <option value="Semi-Detached">Semi-Detached</option>
+                                        <option value="Row Housing">Row Housing</option>
+                                        <option value="Duplex – Detached">Duplex – Detached</option>
+                                        <option value="Duplex – Semi-detached">Duplex – Semi-detached</option>
+                                        <option value="Apartment – Low Rise">Apartment – Low Rise</option>
+                                        <option value="Apartment – High Rise">Apartment – High Rise</option>
+                                        <option value="Mobile Home">Mobile Home</option>
+                                        <option value="Triplex – Detached">Triplex – Detached</option>
+                                        <option value="Triplex – Semi-detached">Triplex – Semi-detached</option>
+                                        <option value="Stacked">Stacked</option>
+                                        <option value="Modular Home – Detached">Modular Home – Detached</option>
+                                        <option value="Modular Home – Semi-detached">Modular Home – Semi-detached</option>
+                                        <option value="Fourplex – Detached">Fourplex – Detached</option>
+                                        <option value="Fourplex – Semi-detached">Fourplex – Semi-detached</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>Liveable Area:</label>
+                                    <input type="text"
+                                           class="form-control input-sm"
+                                           name="Application.PropertyLivingArea"
+                                           ng-model="Application.PropertyLivingArea" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>Units: </label>
+                                    <select class="form-control input-sm"
+                                            name="Application.PropertyLivingAreaUnit"
+                                            ng-model="Application.PropertyLivingAreaUnit">
+                                        <option value="Sq. Feet" selected ng-selected="true">Sq. Feet</option>
+                                        <option value="Sq. Meters">Sq. Meters</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Dwelling Style:</label>
+                                    <select class="form-control input-sm"
+                                            name="Application.PropertyDwellingStyle"
+                                            ng-model="Application.PropertyDwellingStyle">
+                                        <option value="">Choose</option>
+                                        <option value="One storey">One Storey</option>
+                                        <option value="Bi-Level">Bi-Level</option>
+                                        <option value="Two storey">Two-Storey</option>
+                                        <option value="Split level">Split Level</option>
+                                        <option value="Storey and a half">Storey and a half</option>
+                                        <option value="Three Storey">Three Storey</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Garage Type: </label>
+                                    <select class="form-control input-sm"
+                                            name="Application.PropertyGarageType"
+                                            ng-model="Application.PropertyGarageType">
+                                        <option value="">Choose</option>
+                                        <option value="Attached">Attached</option>
+                                        <option value="Detached">Detached</option>
+                                        <option value="None">None</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4"
+                                 ng-show="Application.PropertyGarageType!='None'">
+                                <div class="form-group">
+                                    <label>Garage Size: </label>
+                                    <select class="form-control input-sm"
+                                            name="Application.PropertyGarageSize"
+                                            ng-model="Application.PropertyGarageSize">
+                                        <option value="">Choose</option>
+                                        <option value="Single">Single</option>
+                                        <option value="Double">Double</option>
+                                        <option value="Triple">Triple</option>
+                                        <option value="None">None</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Occupied By:</label>
+                                    <select class="form-control input-sm"
+                                            name="Application.PropertyOccupiedBy"
+                                            ng-model="Application.PropertyOccupiedBy">
+                                        <option value="">Choose</option>
+                                        <option value="Applicant">Applicant</option>
+                                        <option value="Tenant">Tenant</option>
+                                        <option value="Applicant and Tenant">Applicant and Tenant</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label>Is there anything else you would like to tell us about the property you are financing?</label>
+                                    <textarea class="form-control input-sm" rows="5"
+                                              name="Application.PropertyMore"
+                                              ng-model="Application.PropertyMore"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 text-right">
+                                <button class="btn  btn-default pull-left"
+                                        ng-show="sessionUser != null"
+                                        ng-click="saveApp()"
+                                        ng-disabled="isAppSaving()">
+                                    <span ng-show="!isAppSaving()">Save<span ng-show="isSaved()">d <i class="fa fa-check-circle"></i></span></span>
+                                    <span ng-show="isAppSaving()">Saving <i class="fa fa-spin fa-spinner"></i></span>
+                                </button>
+                                <button class="btn  btn-default"
+                                        ng-click="decreaseStep()"
+                                        ng-show="Application.Application2"><i class="fa fa-angle-left"></i> Back</button>
+                                <button class="btn  btn-default"
+                                        ng-click="setStep(3)"
+                                        ng-show="!Application.Application2"><i class="fa fa-angle-left"></i> Back</button>
+                                <button class="btn  btn-primary"
+                                        ng-click="increaseStep()">Next <i class="fa fa-angle-right"></i></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+        <!-- #ABOUT YOU 2 -->
+
+        <div class="row box"
+             ng-show="isStep(8)">
+                <div class="col-xs-12">
+                <h3><i class="fa fa-usd"></i> Confirmation of down payment</h3>
+                <div class="row margin-top-bottom">
+                    <div class="col-xs-12 text-center">
+                        <h2>Down Payment Amount: {{Application.get('MortagePurchaseDownPayment')}}</h2>
+                    </div>
+                </div>
+
+                <div class="row box-small"
+                     ng-fixedbox>
+                    <div class="col-xs-12 col-md-8 col-md-offset-2">
+                        <div class="form-group">
+                            <select class="form-control"
+                                    name="assestsMenu"
+                                    ng-model="assestsMenu"
+                                    ng-change="pushAsset(assestsMenu)">
+                                <option value="">Add anything</option>
+                                <option value="Cash">Savings</option>
+                                <option value="Gifts">Gifts</option>
+                                <!--<option value="Deposit">Deposit on property being purchased</option>-->
+                                <!--<option value="Automobile">Automobile</option>-->
+                                <option value="ValueHome">Sale of home</option>
+                                <!--<option value="Stocks">Stocks, bonds, Mutual funds etc.</option>-->
+                                <option value="Equity" ng-if="Application.MortagePurpose=='Refinance'">Existing equity</option>
+                                <option value="RRSP">RRSP's</option>
+                                <option value="OtherAssets">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row box-small"
+                     ng-click="toggleSections('cash')"
+                     ng-class="{'active': isToggleSection('cash')}"
+                     ng-show="isInAsset('Cash')"
+                     id="box_Cash">
+                    <div class="col-xs-12">
+                        <h3 class="clearfix">
+                            Savings <i class="fa fa-times pull-right cursor text-danger"
+                                            ng-click="removeAssets('Cash')"></i>
+                        </h3>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="col-xs-4">Where/Financial Institution(s)</th>
+                                <th class="col-xs-5">Description</th>
+                                <th class="col-xs-3">Amount/Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="cash in assetsVals.cash">
+                                <td class="col-xs-4">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.cash[$index].where"/>
+                                </td>
+                                <td class="col-xs-5">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.cash[$index].description"/>
+                                </td>
+                                <td class="col-xs-2">
+                                    <input class="form-control input-sm"
+                                           ng-currency
+                                           ng-model="assetsVals.cash[$index].val"/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row margin-bottom-small">
+                            <div class="col-xs-6">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="addAssestsVal('cash')"><i class="fa fa-plus"></i> Add more</button>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="removeAssestsVal('cash')"><i class="fa fa-times"></i> Remove empty rows</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row box-small"
+                     ng-click="toggleSections('gifts')"
+                     ng-class="{'active': isToggleSection('gifts')}"
+                     ng-show="isInAsset('Gifts')"
+                     id="box_Gifts">
+                    <div class="col-xs-12">
+                        <h3 class="clearfix">
+                            Gifts <i class="fa fa-times pull-right cursor text-danger"
+                                       ng-click="removeAssets('Gifts')"></i>
+                        </h3>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="col-xs-4">Where/Financial Institution(s)</th>
+                                <th class="col-xs-5">Description</th>
+                                <th class="col-xs-3">Amount/Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="cash in assetsVals.gifts">
+                                <td class="col-xs-4">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.gifts[$index].where"/>
+                                </td>
+                                <td class="col-xs-5">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.gifts[$index].description"/>
+                                </td>
+                                <td class="col-xs-2">
+                                    <input class="form-control input-sm"
+                                           ng-currency
+                                           ng-model="assetsVals.gifts[$index].val"/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row margin-bottom-small">
+                            <div class="col-xs-6">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="addAssestsVal('gifts')"><i class="fa fa-plus"></i> Add more</button>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="removeAssestsVal('gifts')"><i class="fa fa-times"></i> Remove empty rows</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row box-small"
+                     ng-click="toggleSections('deposit')"
+                     ng-class="{'active': isToggleSection('deposit')}"
+                     ng-show="isInAsset('Deposit')"
+                     id="box_Deposit">
+                    <div class="col-xs-12">
+                        <h3 class="clearfix">
+                            Deposit on property being purchased (if applicable) <i class="fa fa-times pull-right cursor text-danger"
+                                                                                   ng-click="removeAssets('Deposit')"></i>
+                        </h3>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="col-xs-4">Where/Financial Institution(s)</th>
+                                <th class="col-xs-5">Description</th>
+                                <th class="col-xs-3">Amount/Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="deposit in assetsVals.deposit">
+                                <td class="col-xs-4">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.deposit[$index].where"/>
+                                </td>
+                                <td class="col-xs-5">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.deposit[$index].description"/>
+                                </td>
+                                <td class="col-xs-2">
+                                    <input class="form-control input-sm"
+                                           ng-currency
+                                           ng-model="assetsVals.deposit[$index].val"/>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row margin-bottom-small">
+                            <div class="col-xs-6">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="addAssestsVal('deposit')"><i class="fa fa-plus"></i> Add more</button>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="removeAssestsVal('deposit')"><i class="fa fa-times"></i> Remove empty rows</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row box-small"
+                     ng-click="toggleSections('automobile')"
+                     ng-class="{'active': isToggleSection('automobile')}"
+                     ng-show="isInAsset('Automobile')"
+                     id="box_Automobile">
+                    <div class="col-xs-12">
+                        <h3 class="clearfix">
+                            Automobile: present value <i class="fa fa-times pull-right cursor text-danger"
+                                                         ng-click="removeAssets('Automobile')"></i>
+                        </h3>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="col-xs-4">Where/Financial Institution(s)</th>
+                                <th class="col-xs-5">Description</th>
+                                <th class="col-xs-3">Amount/Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="automobile in assetsVals.automobile">
+                                <td class="col-xs-4">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.automobile[$index].where"/>
+                                </td>
+                                <td class="col-xs-5">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.automobile[$index].description"/>
+                                </td>
+                                <td class="col-xs-2">
+
+                                    <input class="form-control input-sm"
+                                           ng-currency
+                                           ng-model="assetsVals.automobile[$index].val"/>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row margin-bottom-small">
+                            <div class="col-xs-6">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="addAssestsVal('automobile')"><i class="fa fa-plus"></i> Add more</button>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="removeAssestsVal('automobile')"><i class="fa fa-times"></i> Remove empty rows</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row box-small"
+                     ng-click="toggleSections('valueHome')"
+                     ng-class="{'active': isToggleSection('valueHome')}"
+                     ng-show="isInAsset('ValueHome')"
+                     id="box_ValueHome">
+                    <div class="col-xs-12">
+                        <h3 class="clearfix">
+                            Sale of home <i class="fa fa-times pull-right cursor text-danger"
+                                                                ng-click="removeAssets('ValueHome')"></i>
+                        </h3>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="col-xs-4">Where/Financial Institution(s)</th>
+                                <th class="col-xs-5">Description</th>
+                                <th class="col-xs-3">Amount/Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="valueHome in assetsVals.valueHome">
+                                <td class="col-xs-4">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.valueHome[$index].where"/>
+                                </td>
+                                <td class="col-xs-5">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.valueHome[$index].description"/>
+                                </td>
+                                <td class="col-xs-2">
+
+                                    <input class="form-control input-sm"
+                                           ng-currency
+                                           ng-model="assetsVals.valueHome[$index].val"/>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row margin-bottom-small">
+                            <div class="col-xs-6">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="addAssestsVal('valueHome')"><i class="fa fa-plus"></i> Add more</button>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="removeAssestsVal('valueHome')"><i class="fa fa-times"></i> Remove empty rows</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row box-small"
+                     ng-click="toggleSections('stocks')"
+                     ng-class="{'active': isToggleSection('stocks')}"
+                     ng-show="isInAsset('Stocks')"
+                     id="box_Stocks">
+                    <div class="col-xs-12">
+                        <h3 class="clearfix">
+                            Stocks, bonds, Mutual funds etc. <i class="fa fa-times pull-right cursor text-danger"
+                                                                ng-click="removeAssets('Stocks')"></i>
+                        </h3>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="col-xs-4">Where/Financial Institution(s)</th>
+                                <th class="col-xs-5">Description</th>
+                                <th class="col-xs-3">Amount/Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="stocks in assetsVals.stocks">
+                                <td class="col-xs-4">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.stocks[$index].where"/>
+                                </td>
+                                <td class="col-xs-5">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.stocks[$index].description"/>
+                                </td>
+                                <td class="col-xs-2">
+
+                                    <input class="form-control input-sm"
+                                           ng-currency
+                                           ng-model="assetsVals.stocks[$index].val"/>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row margin-bottom-small">
+                            <div class="col-xs-6">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="addAssestsVal('stocks')"><i class="fa fa-plus"></i> Add more</button>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="removeAssestsVal('stocks')"><i class="fa fa-times"></i> Remove empty rows</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row box-small"
+                     ng-click="toggleSections('equity')"
+                     ng-class="{'active': isToggleSection('equity')}"
+                     ng-show="isInAsset('Equity')"
+                     id="box_Equity">
+                    <div class="col-xs-12">
+                        <h3 class="clearfix">
+                            Existing equity <i class="fa fa-times pull-right cursor text-danger"
+                                      ng-click="removeAssets('Equity')"></i>
+                        </h3>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="col-xs-4">Where/Financial Institution(s)</th>
+                                <th class="col-xs-5">Description</th>
+                                <th class="col-xs-3">Amount/Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="rrsp in assetsVals.equity">
+                                <td class="col-xs-4">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.equity[$index].where"/>
+                                </td>
+                                <td class="col-xs-5">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.equity[$index].description"/>
+                                </td>
+                                <td class="col-xs-2">
+
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.equity[$index].val"
+                                           ng-currency/>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row margin-bottom-small">
+                            <div class="col-xs-6">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="addAssestsVal('equity')"><i class="fa fa-plus"></i> Add more</button>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="removeAssestsVal('equity')"><i class="fa fa-times"></i> Remove empty rows</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row box-small"
+                     ng-click="toggleSections('rrsp')"
+                     ng-class="{'active': isToggleSection('rrsp')}"
+                     ng-show="isInAsset('RRSP')"
+                     id="box_RRSP">
+                    <div class="col-xs-12">
+                        <h3 class="clearfix">
+                            RRSP's <i class="fa fa-times pull-right cursor text-danger"
+                                      ng-click="removeAssets('RRSP')"></i>
+                        </h3>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="col-xs-4">Where/Financial Institution(s)</th>
+                                <th class="col-xs-5">Description</th>
+                                <th class="col-xs-3">Amount/Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="rrsp in assetsVals.rrsp">
+                                <td class="col-xs-4">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.rrsp[$index].where"/>
+                                </td>
+                                <td class="col-xs-5">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.rrsp[$index].description"/>
+                                </td>
+                                <td class="col-xs-2">
+
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.rrsp[$index].val"
+                                           ng-currency/>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row margin-bottom-small">
+                            <div class="col-xs-6">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="addAssestsVal('rrsp')"><i class="fa fa-plus"></i> Add RRSP</button>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="removeAssestsVal('rrsp')"><i class="fa fa-times"></i> Remove empty rows</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row box-small"
+                     ng-click="toggleSections('otherAssets')"
+                     ng-class="{'active': isToggleSection('otherAssets')}"
+                     ng-show="isInAsset('OtherAssets')"
+                     id="box_OtherAssets">
+                    <div class="col-xs-12">
+                        <h3 class="clearfix">
+                            Other <i class="fa fa-times pull-right cursor text-danger"
+                                            ng-click="removeAssets('OtherAssets')"></i>
+                        </h3>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="col-xs-4">Where/Financial Institution(s)</th>
+                                <th class="col-xs-5">Description</th>
+                                <th class="col-xs-3">Amount/Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="otherAssets in assetsVals.otherAssets">
+                                <td class="col-xs-4">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.otherAssets[$index].where"/>
+                                </td>
+                                <td class="col-xs-5">
+                                    <input class="form-control input-sm"
+                                           ng-model="assetsVals.otherAssets[$index].description"/>
+                                </td>
+                                <td class="col-xs-2">
+
+                                    <input class="form-control input-sm"
+                                           ng-currency
+                                           ng-model="assetsVals.otherAssets[$index].val"/>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row margin-bottom-small">
+                            <div class="col-xs-6">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="addAssestsVal('otherAssets')"><i class="fa fa-plus"></i> Add more</button>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <button class="btn btn-default btn-smx"
+                                        type="button"
+                                        ng-click="removeAssestsVal('otherAssets')"><i class="fa fa-times"></i> Remove empty rows</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 text-right">
+                        <button class="btn  btn-default pull-left"
+                                ng-show="sessionUser != null"
+                                ng-click="saveApp()"
+                                ng-disabled="isAppSaving()">
+                            <span ng-show="!isAppSaving()">Save<span ng-show="isSaved()">d <i class="fa fa-check-circle"></i></span></span>
+                            <span ng-show="isAppSaving()">Saving <i class="fa fa-spin fa-spinner"></i></span>
+                        </button>
+                        <button class="btn  btn-default"
+                                ng-click="decreaseStep()"><i class="fa fa-angle-left"></i> Back</button>
+                        <button class="btn  btn-primary"
+                                ng-click="increaseStep()">Next <i class="fa fa-angle-right"></i></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row box"
+             ng-show="isStep(10)">
+            <div class="col-xs-12">
+                <h2><i class="fa fa-exclamation-circle"></i> Other information</h2>
+
+
+                <div class="row">
+                    <div class="col-xs-6">
+
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-horizontal">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="control-label col-sm-5 text-left">Solicitor Name:</label>
+                            <div class="col-sm-5">
+                                <input type="text"
+                                       class="form-control input-sm"
+                                       name="Application.Solicitor"
+                                       ng-model="Application.Solicitor">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-5 text-left">Solicitor Phone:</label>
+                            <div class="col-sm-5">
+                                <input type="text"
+                                       class="form-control input-sm"
+                                       name="Application.SolicitorPhone"
+                                       ng-phone
+                                       ng-model="Application.SolicitorPhone">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-5 text-left">Solicitor Email:</label>
+                            <div class="col-sm-5">
+                            <input type="email"
+                                   class="form-control input-sm"
+                                   name="Application.SolicitorEmail"
+                                   ng-model="Application.SolicitorEmail">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 text-right">
+                        <button class="btn  btn-default pull-left"
+                                ng-show="sessionUser != null"
+                                ng-click="saveApp()"
+                                ng-disabled="isAppSaving()">
+                            <span ng-show="!isAppSaving()">Save<span ng-show="isSaved()">d <i class="fa fa-check-circle"></i></span></span>
+                            <span ng-show="isAppSaving()">Saving <i class="fa fa-spin fa-spinner"></i></span>
+                                </button>
+                        <button class="btn  btn-default"
+                                ng-click="decreaseStep()"><i class="fa fa-angle-left"></i> Back</button>
+                        <button class="btn  btn-primary"
+                                ng-click="increaseStep()">Next <i class="fa fa-angle-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row box"
+             ng-show="isStep(11)">
+                <div class="col-xs-12">
+                    <h2><i class="fa fa-check-circle"></i> Submit application</h2>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p class="text-muted"><small>I/we warrant and confirm that the information given in the mortgage
+                                application form is true and correct and I/we understand that it is being collected
+                                and will be used to determine my/our credit responsibility. You are authorized to obtain
+                                any information you may require for these purposes from other sources (including, for example
+                                , credit reporting agencies) and each such source is hereby authorized to provide you with such information.
+                                I/we also understand that the information given in the mortgage application form as well as other information you obtain
+                                in relation to my credit history may be disclosed to potential mortgage lenders, financial intermediaries and mortgage insurers,
+                                organizations providing technological or other support services required in relation to this application and any other parties with whom
+                                I/we propose to have a financial relationship.</small></p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox"
+                                           name="acceptTerms"
+                                           ng-model="acceptTerms"
+                                           required
+                                           ng-required="true">
+                                        <span class="text-danger">*</span>
+                                        <strong style="font-size: 14px">I/we agree that by submitting this online mortgage application,
+                                        I/we are accepting the terms of the paragraph noted above and
+                                             <a href="#" prevent-def
+                                                  data-toggle="modal" data-target="#privacy"
+                                                  class="dark-link">doyourownmortgage.com</a> privacy policy.</strong>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <strong class="text-danger" ng-show="errorSubmit">{{error}}</strong>
+                        </div>
+                    </div>
+
+                    <div class="row"
+                         ng-show="!isApplicationValid() || !acceptTerms">
+                        <div class="col-xs-12">
+                            <div class="alert alert-danger">
+                                <strong>Before you can submit application you must enter all required fields on thoose sections:</strong>
+                                <ul class="list-unstyled">
+                                    <li ng-show="!isValidStep(1)"
+                                        class="cursor"
+                                        ng-click="setStep(0)"><i class="fa fa-times-circle-o"></i> Mortage details </li>
+                                    <li ng-show="!isValidStep(2)"
+                                        class="cursor"
+                                        ng-click="setStep(1)"><i class="fa fa-times-circle-o"></i> About you (Personal information)</li>
+                                    <li ng-show="!isValidStep(3)"
+                                        class="cursor"
+                                        ng-click="setStep(2)"><i class="fa fa-times-circle-o"></i> About you (Address information)</li>
+                                    <li ng-show="!isValidStep(4)"
+                                        class="cursor"
+                                        ng-click="setStep(3)"><i class="fa fa-times-circle-o"></i> About you (Employment information)</li>
+                                    <li ng-show="!isValidStep(8)"
+                                        class="cursor"
+                                        ng-click="setStep(7)"><i class="fa fa-times-circle-o"></i> Property Information</li>
+                                    <li ng-show="!acceptTerms"><i class="fa fa-times-circle-o"></i> Accept Agrement (click on checkbox)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row margin-top-bottom">
+                        <div class="col-xs-12 text-center">
+                            <div ng-if="sessionUser==null">
+                                <p><strong>Great, now that you’ve completed your own mortgage application,
+                                    in order to track your application status, we will need you to register.</strong></p>
+                                <button class="btn btn-custom btn-info"
+                                        data-toggle="modal" data-target="#register"
+                                        type="button">
+                                    Register to Submit
+                                </button>
+                            </div>
+                            <button class="btn btn-custom btn-success"
+                                    ng-if="sessionUser!=null"
+                                    ng-disabled="isAppLoading() || !acceptTerms || !isApplicationValid()"
+                                    ng-click="submitApplication()"
+                                    type="submit">
+                                Submit Application
+                                <i class="fa fa-spin fa-spinner"
+                                   ng-show="isAppLoading()"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div ng-if="sessionUser!=null && sessionUser.has('referal')"
+                         class="text-center">
+                        <h2>You were referred by:</h2>
+                        <img ng-if="referal.has('profileImg')" ng-src="{{ referal.get('profileImg').url() }}"
+                             class="user-img img-circle">
+                        <img ng-if="referal.has('facebookId') && !referal.has('facebookId')"
+                             ng-src="https://graph.facebook.com/{{referal.get('facebookId')}}/picture?width=125&height=125"
+                             class="user-img img-circle">
+                        <img ng-if="!referal.has('facebookId') && !referal.has('profileImg')"
+                             ng-src="resources/img/user-placeholder.png"
+                             class="user-img img-circle">
+                        <h3>{{ referal.get("firstName")+" "+referal.get("lastName") }}</h3>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 text-right">
+                            <button class="btn  btn-default"
+                                    ng-click="decreaseStep()"><i class="fa fa-angle-left"></i> Back</button>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <!-- End of New Application -->
+
+        </div>
+
+        <!-- Registration / Login Area -->
+        <div class="row"
+             ng-show="sessionUser == null">
+            <div class="col-xs-10 col-xs-offset-1 text-center special-box">
+                <h3>Save Your Data - Register Now</h3>
+                    <button class="btn btn-lg btn-primary"
+                            data-toggle="modal" data-target="#register">Register</button>
+                    <button class="btn btn-lg btn-default"
+                            data-toggle="modal" data-target="#login">Login</button>
+            </div>
+        </div>
+
+        </div>
+
+    </div>
+
+</div>
+

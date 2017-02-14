@@ -1,0 +1,77 @@
+<div class="container-fluid header-how-it-works">
+    <div class="row" id="how-it-works-r-1">
+        <div class="col-xs-12 text-center">
+            <h2 class="headerH2">How it Works</h2>
+        </div>
+    </div>
+    <div class="row" id="how-it-works-r-2">
+       <div class="col-sm-4">
+           <div>
+               <img ng-src="resources/img/how-it-works-step-1.jpg" class="img-responsive center-block">
+               <h2 class="special-margin aleoFont text-center">STEP 1</h2>
+               <p class="text-center">Take less than 10 minutes of your time to fill out our safe and secure mortgage application.</p>
+           </div>
+       </div>
+       <div class="col-sm-4">
+           <div>
+               <img ng-src="resources/img/how-it-works-step-2.jpg" class="img-responsive center-block">
+               <h2 class="special-margin aleoFont text-center">STEP 2</h2>
+               <p  class="text-center">Once your application has been submitted, you will receive a confirmation email prompting you to confirm your email</p>
+           </div>
+       </div>
+       <div class="col-sm-4">
+           <div>
+               <img ng-src="resources/img/how-it-works-step-3.jpg" class="img-responsive center-block">
+               <h2 class="special-margin aleoFont text-center">STEP 3</h2>
+               <p  class="text-center">Once we have received your application, one of our mortgage licensed agents will contact you to confirm your details and ensure the information you submitted is accurate.</p>
+           </div>
+       </div>
+       <div class="col-sm-offset-2 col-sm-4" style="padding-top: 40px">
+           <div>
+               <img ng-src="resources/img/how-it-works-step-4.jpg" class="img-responsive center-block">
+               <h2 class="special-margin aleoFont text-center">STEP 4</h2>
+               <p class="text-center">With access to over 50 lenders, we will do our best to find you the best possible rate and match you with a lender that meets your requirements.</p>
+           </div>
+       </div>
+       <div class="col-sm-4" style="padding-top: 40px">
+            <div>
+               <img ng-src="resources/img/how-it-works-step-5.jpg" class="img-responsive center-block">
+               <h2 class="special-margin aleoFont text-center">STEP 5</h2>
+               <p class="text-center">Once we have received an Approval (usually within 48hrs of submission) we will contact you to review the details of the mortgage commitment.</p>
+            </div>
+       </div>
+    </div>
+    <div class="row" id="how-it-works-r-3">
+        <div>
+            <h2 class="text-center">Frequently Asked Questions</h2>
+            <hr class="R3Hr">
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                    <div class="comments">
+                        <div class="bord"
+                         ng-repeat="faq in faqs">
+                        <div class="cursor grayed "
+                              ng-click="setFaq($index)">
+                            <div class="btn-group" role="group" aria-label="...">
+                            <span class="btn btn-properties-sign" ng-class="{'blue-header-sign' : isFaqIndex($index)}">
+                                {{!isFaqIndex($index) ? "+" : "-"}}
+                            </span>
+                            <span class="btn btn-properties" ng-class="{'blue-header-title' : isFaqIndex($index)}">
+                                {{faq.title}}
+                            </span>
+                        </div>
+                        </div>
+                        <div class="bor-topa pad back-ground-white"
+                             ng-show="isFaqIndex($index)"
+                             ng-bind-html="faq.desc">
+                             {{faq.desc}}
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

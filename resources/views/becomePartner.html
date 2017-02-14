@@ -1,0 +1,86 @@
+<div class="partner-howItworks clearfix">
+    <a href="#" prevent-def class="close" ng-click="setHow()"><i class="fa fa-times"></i></a>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <h1 class="aleoFont">Partner Program Details</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4  text-center">
+                <img src="resources/img/p1.png" />
+                <h3 class="aleoFont">Create an Account</h3>
+                <p>Register for a partner account and login to your partner dashboard.</p>
+            </div>
+            <div class="col-md-4  text-center">
+                <img src="resources/img/p2.png" />
+                <h3 class="aleoFont">Send your link</h3>
+                <p>Send your customers your unique tracking link and ask them to do their own mortgage online.</p>
+            </div>
+            <div class="col-md-4  text-center">
+                <img src="resources/img/p3.png" />
+                <h3 class="aleoFont">Get cash on approval</h3>
+                <p>Once your customer has been approved, you will be a credit will be added to your partner dashboard.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="partner-header">
+
+    <span class="content">
+        <h1 class="header-heading">
+            Become a partner
+            <small>Refer your clients and get commision on closing</small>
+        </h1>
+        <button class="btn-transparent aleoFont" ng-click="setHow()">How it works</button>
+    </span>
+
+</div>
+<div class="blue-back-light clearfix">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-1 text-center-sm text-center-xs text-right">
+                <h2 class="aleoFont whiteText"  ng-if="sessionUser==null">Join the partner program now</h2>
+            </div>
+            <div class="col-md-2 text-center-sm text-center-xs">
+                <button class="btn btn-custom btn-blue micro-margin btn-lg"
+                        ng-if="sessionUser==null"
+                        scroll-animate="blink"
+                        data-toggle="modal" data-target="#register">Register now</button>
+            </div>
+            <div class="col-md-12 text-center"
+                 ng-if="sessionUser!=null">
+                <button class="btn btn-custom btn-blue micro-margin btn-lg"
+                        scroll-animate="blink"
+                        ng-click="next('dashboard')">Go to your dashboard <i class="fa fa-angle-right"></i> </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container special-margin-container">
+    <div class="row">
+        <div class="col-xs-12 text-center special-margin">
+            <h1 class="aleoFont bigF text-center">Who are our partners?</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="partner-box">
+                <img src="resources/img/partner1.png" />
+                <div class="content">
+                    <strong>Realtors</strong>
+                    <p>Referr your clients and get a bonus of up to 1% of the closing cost.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="partner-box">
+                <img src="resources/img/partner2.png" />
+                <div class="content">
+                    <strong>Financial Advisors</strong>
+                    <p>Get a great mortgage rate, plus you get cash back payable on closing.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

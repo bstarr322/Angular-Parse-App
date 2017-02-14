@@ -1,0 +1,347 @@
+<div>
+
+    <div class="modal fade close-special" id="register" tabindex="-1" role="dialog" aria-labelledby="registerLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title text-center" id="registerLabel">Create an Account</h4>
+                </div>
+                <div class="modal-body text-center no-padding">
+
+                    <button class="btn btn-block btn-modal btn-facebook" ng-click="userHandler.signupFB()" type="button">
+                        <span ng-hide="errors.isLive('fbLoginExist')">Sign up with Facebook</span>
+                        <span ng-show="errors.isLive('fbLoginExist')"> <i class="fa fa-times-circle"></i> {{errors.get('fbLoginExist')}}</span>
+                    </button>
+                    <button class="btn btn-block btn-modal btn-google"
+                            ng-click='userHandler.registerGoogle()'>
+                        <span ng-hide="errors.isLive('googleLoginExist')">Sign up with Google</span>
+                        <span ng-show="errors.isLive('googleLoginExist')"><i class="fa fa-times-circle"></i> {{errors.get('googleLoginExist')}}</span>
+                    </button>
+
+                    <div class="modal-padding">
+                        <hr/>
+                        <h4 class="text-center cursor"
+                            ng-click="stepReg=true;">or Sign up with Email</h4>
+                    </div>
+
+                    <form novalidate="true"
+                          role="form"
+                          class="modalForm text-left"
+                          name="registerForm"
+                          ng-submit="userHandler.register(registerForm); password=''"
+                          autocomplete="off">
+
+                        <div ng-show="sessionUser == null && stepReg">
+                            <div class="form-group"
+                                 ng-class="{'invalid': registerForm.ufname.$invalid && !registerForm.ufname.$pristine}">
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="Enter your first name"
+                                       required
+                                       ng-required="true"
+                                       name="ufname"
+                                       ng-minlength="3"
+                                       ng-model="ufname" />
+                            </div>
+                            <div class="form-group"
+                                 ng-class="{'invalid': registerForm.ulname.$invalid && !registerForm.ulname.$pristine}">
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="Enter your last name"
+                                       required
+                                       ng-minlength="3"
+                                       ng-required="true"
+                                       name="ulname"
+                                       ng-model="ulname" />
+                            </div>
+                            <div class="form-group"
+                                 ng-class="{'invalid': registerForm.email.$invalid && !registerForm.email.$pristine || registerForm.email.$error.unique}">
+                                <input type="email"
+                                       class="form-control"
+                                       placeholder="Enter your email"
+                                       required
+                                       ng-unique
+                                       ng-required="true"
+                                       name="email"
+                                       ng-model="email" />
+                                <small class="text-danger text-block padding-left"
+                                       ng-show="!registerForm.email.$error.unique && registerForm.email.$invalid && !registerForm.email.$pristine">Email is not correct</small>
+                                <small class="text-danger center-block padding-left" ng-show="registerForm.email.$error.unique">Email already exist.</small>
+                            </div>
+                            <div class="form-group"
+                                 ng-class="{'invalid': registerForm.password.$invalid && !registerForm.password.$pristine}">
+                                <input type="password"
+                                       class="form-control"
+                                       placeholder="Enter your password"
+                                       required
+                                       ng-required="true"
+                                       name="password"
+                                       ng-model="password"
+                                       ng-minlength="6" />
+                                <small class="text-danger padding-left" ng-show="registerForm.password.$error.minlength && !registerForm.password.$pristine">At leas 6 charachters long.</small>
+                            </div>
+                            <div class="form-group bor-bottom"
+                                 ng-class="{'invalid': registerForm.cpassword.$invalid && !registerForm.cpassword.$pristine}">
+                                <input type="password"
+                                       class="form-control"
+                                       placeholder="Confirm password"
+                                       required
+                                       ng-required="true"
+                                       name="cpassword"
+                                       password-match="password"
+                                       ng-model="cpassword"
+                                       ng-minlength="6" />
+                                <small class="text-danger padding-left" ng-show="registerForm.cpassword.$invalid && !registerForm.cpassword.$pristine">Passwords dosen't match.</small>
+                            </div>
+
+                            <div class="checkbox modal-padding">
+                                <label>
+                                    <input type="checkbox" required ng-required="true" name="privacy" ng-model="privacy">
+                                    I agree with DYOM <a href="/#" ng-click="next('privacy')" data-dismiss="modal">privacy policy</a>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="news" ng-model="news" value="true"> Sign me up for Do your own mortgage news
+                                </label>
+                            </div>
+
+                            <button class="btn btn-block btn-modal btn-success"
+                                    ng-disabled="registerForm.$invalid">Sign up</button>
+                        </div>
+
+                    </form>
+
+                    <h5 class="cursor text-center small-margin-top-bottom">
+                        <a href="#login" data-toggle="modal" data-dismiss="modal">Already a member? Log in.</a>
+                    </h5>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade close-special" id="login" tabindex="-1" role="dialog" aria-labelledby="loginLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <form novalidate="true"
+                      role="form"
+                      name="loginForm"
+                      ng-submit="userHandler.logMein(loginForm); password=''"
+                      autocomplete="off">
+
+                    <div class="modal-header text-center">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="loginLabel">Login</h4>
+                    </div>
+
+                    <div class="modal-body modalForm no-padding">
+
+                        <div class="form-group">
+                            <input type="email"
+                                   class="form-control"
+                                   placeholder="Enter your email"
+                                   required
+                                   ng-exist
+                                   ng-required="true"
+                                   name="email"
+                                   ng-model="email" />
+                            <small class="text-danger center-block padding-left" ng-show="loginForm.email.$error.unique">This Email isn't registered. Click
+                                <a href="#register"
+                                   data-dismiss="modal"
+                                   data-toggle="modal">here</a> to register.</small>
+                        </div>
+                        <div class="form-group">
+                            <input type="password"
+                                   class="form-control"
+                                   placeholder="Enter your password"
+                                   required
+                                   ng-required="true"
+                                   name="password"
+                                   ng-model="password"
+                                   ng-minlength="6" />
+                        </div>
+
+                        <div class="text-danger modal-padding"
+                             ng-show="loginError.length>0">
+                            <strong>Error.</strong>  {{loginError}}
+                        </div>
+
+                        <button class="btn btn-block btn-modal btn-success"
+                                ng-disabled="loginForm.$invalid">Log in</button>
+                        <button class="btn btn-block btn-modal btn-facebook" ng-click="userHandler.loginFB()" type="button">
+                            <span ng-hide="errors.isLive('fbLogin') || errors.isLive('fbLoginExist')">Login with Facebook</span>
+                            <span ng-show="errors.isLive('fbLogin')"><i class="fa fa-times-circle"></i> {{errors.get('fbLogin')}}</span>
+                            <span ng-show="errors.isLive('fbLoginExist')"><i class="fa fa-times-circle"></i> {{errors.get('fbLoginExist')}}</span>
+                        </button>
+                        <button ng-click='userHandler.loginGoogle()' class="btn btn-block btn-modal btn-google" type="button">
+                            <span ng-hide="errors.isLive('googleLogin') || errors.isLive('googleLoginExist')">Login with Google</span>
+                            <span ng-show="errors.isLive('googleLogin')"><i class="fa fa-times-circle"></i> {{errors.get('googleLogin')}}</span>
+                            <span ng-show="errors.isLive('googleLoginExist')"><i class="fa fa-times-circle"></i> {{errors.get('googleLoginExist')}}</span>
+                        </button>
+
+                        <div class="form-group modal-padding text-center">
+
+                            <small>
+                                <a href="#register"
+                                   data-dismiss="modal"
+                                   data-toggle="modal">Don't have account yet?</a><br/>
+                                <a href="#forgotPass"
+                                   data-dismiss="modal"
+                                   data-toggle="modal">Forgot password?</a>
+                            </small>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade close-special" id="forgotPass" tabindex="-1" role="dialog" aria-labelledby="forgotPassLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <form novalidate="true"
+                      role="form"
+                      name="forgotPassForm"
+                      ng-submit="userHandler.forgotPass(forgotPassForm)"
+                      autocomplete="off">
+                    <div class="modal-header text-center">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="forgotPassLabel">Forgot password?</h4>
+                    </div>
+                    <div class="modal-body modalForm no-padding">
+                        <div class="form-group">
+                            <input type="email"
+                                   class="form-control"
+                                   placeholder="Enter your email"
+                                   required
+                                   ng-required="true"
+                                   name="email"
+                                   ng-model="email" />
+                        </div>
+                        <button type="submit"
+                                class="btn btn-block btn-modal btn-primary"
+                                ng-disabled="forgotPassForm.$invalid">Send me new password</button>
+
+                        <div class="form-group modal-padding text-center">
+                            <div class="alert alert-success"
+                                 ng-show="resetSuccess">
+                                <strong>Success.</strong>  Password reset link was sent to your email.
+                            </div>
+
+                            <div class="alert alert-danger"
+                                 ng-show="resetError">
+                                <strong>Error.</strong>  We didn't find any user with this email in our database. Please check.
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade close-special" id="privacy" tabindex="-1" role="dialog" aria-labelledby="privacyLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div style="padding:20px 50px">
+
+                <h2 class="text-danger">Privacy Policy</h2>
+                <p>This Web site is protected under the copyright laws of Canada and other countries and Invis Inc. shall legally enforce its rights concerning the content contained herein. Except for personal or non-commercial use, no person has permission to republish or reproduce the contents in any form or by any means without prior written consent from Invis Inc.</p>
+                <p>At Invis Inc. ("Invis"), we are committed to protecting the privacy and confidentiality of the personal information of our clients (individually, the "Client" and collectively, the "Clients".) As financial service providers, we have a professional obligation to maintain in confidence information we receive within our role as a financial services provider. The purpose of this Privacy Policy is to advise you as to why we ask for personal information, how we use it, what safeguards we employ, and how to contact us with privacy-related matters.</p>
+
+                <strong>What is personal information?</strong>
+                <p>In this Privacy Policy, "Personal Information" means information that is gathered in connection with an application, pre-approval, request for information for a mortgage(s) or loan(s) and insurance or other product through Invis or Invis affiliate and is provided to, or collected by, Invis and its staff or by Invis' agents, associates, and affiliates on Invis' behalf (collectively, "Invis").</p>
+
+                <strong>Why does Invis collect personal information?</strong>
+
+                <p>Invis collects and uses Personal Information for the following purposes:</p>
+                <ul>
+                    <li>Providing mortgage brokering services to the Client and offer products and services best suited to their needs, including arranging and/or renewing loan(s)/mortgage(s), informing the client of group creditor insurance and other products offered or approved by Invis or its affiliates that may be of interest to the Client;</li>
+                    <li>Checking Client credit worthiness through credit bureau inquiry and personal information agents who have information on a Client's financial position.</li>
+                    <li>Auditing the services provided to our Clients, compliance with all municipal, provincial, federal and other applicable laws and other specific purposes which are communicated to the Client by a member of Invis before collection of such Personal Information.</li>
+                </ul>
+                <p>Except when otherwise permitted by law, we will only use a Client's Personal Information for the purposes identified to the Client. When Personal Information is to be used for a purpose not identified, we will take all reasonable steps to ensure that new purpose is identified prior to use.</p>
+
+                <strong>How does Invis collect personal information?</strong>
+                <p>The Client is our main source of information. With the Client's consent, we may also obtain information directly from a third party to help us determine your eligibility for various financial products and services. For credit matters, for example, it is essential that we know your financial worth as well as your credit record. We will also contact other lenders, financial institutions, credit bureaus and employers. Your consent is therefore important because without it, we will not be able to carry out the appropriate inquiries and it might be difficult for us to offer you the credit product you request. In most cases, your consent is given on the forms used for specific products or, from time to time, on a separate form. You will notice that the declaration of consent is clear and unambiguous.</p>
+
+                <strong>Consent</strong>
+                <p>Your provision of Personal Information to Invis means that you agree and consent that Invis can collect, use and disclose your Personal Information in compliance with this Privacy Policy. Invis will not collect, use or disclose a Client's Personal Information without the Client's requisite consent, except in certain extraordinary circumstances. Such extraordinary circumstances shall include without limitation, when legal, medical or security reasons make it impossible or impractical to obtain consent or where it is otherwise in the best interests of the Client.</p>
+                <p>The most common method we use to obtain a Client's consent is by way of the Client's consent as confirmed by the application. Where practicable, we may also obtain a Client's consent through oral communications or other written documentation. Our Clients may withdraw their consent by written notice to us at any time, subject to any legal or contractual restrictions and reasonable notice. A Client's refusal to provide, or subsequent withdrawal of, his or her consent may affect Invis' ability to provide the Client with mortgage services. A member of Invis will inform the Client of the implications of such withdrawal. To withdraw consent, Client should contact the Chief Privacy Officer in writing at:</p>
+
+                <p>
+                    Invis Inc.<br/>
+                    Attn: Chief Privacy Officer<br/>
+                    5770 Hurontario St., Suite 104<br/>
+                    Mississauga, ON L5R 3G5
+                </p>
+
+                <strong>Use and disclosure of personal information</strong>
+
+                <p>We will use a Client's Personal Information to provide financial advice and services to the Client, to administer our database, to include Clients in direct marketing activities and for the other uses described above under the heading "Why does Invis collect personal information". Under certain circumstances, Invis will disclose a Client's personal information to third parties. Specifically, Personal Information may be used, shared and disclosed to, from, or with, the members of Invis, witnesses in a litigation proceeding, experts retained on a Client's behalf, private investigators, agents retained on behalf of a Client, credit reporting agencies, credit bureaus, as well as such other third parties as are necessary to facilitate the matter for which the Client has retained our office and provided its consent.</p>
+
+                <p>Under certain circumstances Invis may disclose Personal Information where:</p>
+
+                <ul>
+                    <li>required or authorized by law to do so, for example if a court issues a subpoena;</li>
+                    <li>a Client has consented to the disclosure;</li>
+                    <li>when mortgage services by Invis are provided to a Client requiring us to give Personal Information about a Client to a third party (for example, to a lender in a real estate mortgage transaction) the Client's consent will be implied, unless the Client tells us otherwise;</li>
+                    <li>where it is necessary to pull a credit bureau for purposes of processing a mortgage transaction;</li>
+                    <li>if Invis engages a third party to provide administrative or support services (such as computer back-up services, shredding or archival file storage) and the third party is bound by our Privacy Policy;</li>
+                    <li>protection of Invis' best interests</li>
+                    <li>protection of public interests such as the denouncement of criminal activity such as fraud or money laundering. In all such cases, authorities are contacted and personal information may be disclosed or if we retain a law firm(s) to act on our behalf for any reason;</li>
+                    <li>if the information is already publicly known.</li>
+                </ul>
+
+                <p>In addition, if you are a British Columbia Client, your Personal Information will be provided to your Invis agent (and a copy retained by Invis for purposes consistent with this Privacy Policy) in the event of his or her departure from Invis, in order to meet your ongoing financial needs. If you have any questions, or to withdraw your consent to this use, please contact Invis' Privacy Officer.</p>
+
+                <strong>Limiting collection and retention of personal information</strong>
+
+                <p>Invis limits the collection of a Client's Personal Information to that which is necessary for the purposes identified in this Privacy Policy as it may be amended from time to time, or for any additional purpose identified to the Client before the collection of the Personal Information. As well, Personal Information is not used or disclosed for purposes other than those for which it was originally collected, except with the consent of the Client or as otherwise permitted by law.</p>
+
+                <p>Invis will retain Personal Information only for so long as it is needed to fulfill the purposes for which it was obtained and to meet our professional requirements as set out our governing regulatory bodies and/or any other legal requirement, statutory or otherwise, from time to time.</p>
+
+                <strong>Accuracy</strong>
+                <p>Invis strives to ensure that a Client's Personal Information is as accurate, complete, and up-to-date as is necessary for the purposes for which it is used.</p>
+
+                <strong>Safeguards</strong>
+                <p>Invis endeavors to maintain adequate safeguards to protect against loss, theft, unauthorized access, disclosure, copying, use or modification of Clients' Personal Information in the care of the Invis. Invis uses various methods to safeguard personal information, including physical security, computer and electronic security, destruction of information no longer needed, and contractual protections with third party data processors.</p>
+
+                <strong>Protection</strong>
+                <p>Client lists are never passed on to third parties other than affiliated members of Invis. When they are hired, our employees and agents must undertake to respect the confidential nature of client information. Only employees who need to view your file as part of their work have access to this information.</p>
+
+                <strong>Accountability, Openness and Client Access</strong>
+                <p>Invis is responsible for the Personal Information under its control and has appointed a Chief Privacy Officer to oversee our efforts to comply in all material respects with applicable privacy legislation and the terms of this Privacy Policy. The Chief Privacy Officer and those designated by the Chief Privacy Officer address and investigate questions or concerns regarding a Client's Personal Information.</p>
+
+                <p><strong>To reach the Chief Privacy Officer or a member the Privacy Team, please call 905.283.3380 or 1.888.468.4734.</strong></p>
+
+                <p>Invis will provide a Client access to their Personal Information. The Client may correct or amend any inaccuracies in the Client's Personal Information. Invis has the right to refuse a request for access to Personal Information if:</p>
+
+                <ul>
+                    <li>The information is protected by legal privilege;</li>
+                    <li>Granting access would reveal confidential commercial information;</li>
+                    <li>The information was collected for purposes related to the detection and prevention of fraud;</li>
+                    <li>The information was generated in the course of a formal dispute resolution process;</li>
+                    <li>The information would likely reveal personal information about another individual;</li>
+                    <li>The request is vexation or frivolous;</li>
+                    <li>To protect our firm's rights and property.</li>
+                </ul>
+
+                <strong>Communicating with Invis</strong>
+                <p>We recognize that convenience and quick access to advice must be balanced with security needs. We use many different means to communicate with clients, some of which are more convenient such as e-mail. Our emails are sent with industry standard 128 bit encryption. Such encryption however does not guarantee privacy and security as encrypted messages can nonetheless be subject to interception and translation. If you do not wish us to communicate with you by e-mail, please speak with the consultant/broker/agent handling your matter about alternative arrangements.</p>
+
+                <strong>Questions</strong>
+
+                <p>If you have questions or comments regarding the management of your personal information, contact:</p>
+
+                Invis Inc.<br/>
+                Attn: Chief Privacy Officer<br/>
+                5770 Hurontario St., Suite 104<br/>
+                Mississauga, ON L5R 3G5<br/>
+                Tel: 905.283.3380 / 1.888.468.4734
+
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+</div>

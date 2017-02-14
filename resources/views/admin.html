@@ -1,0 +1,439 @@
+<div class="container padding-top">
+        <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-md-5">
+                    <h1 class="text-info">Application #{{application.refId}}</h1>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-xs-5 text-right" style="padding-top: 10px">Application status:</label>
+                        <div class="col-xs-7">
+                            <div class="input-group">
+                            <select name="limit"
+                                    class="form-control"
+                                    ng-model="application.ApplicationStatus">
+                                <option value="0">Started</option>
+                                <option value="1">Submited</option>
+                                <option value="2">Received</option>
+                                <option value="3">Pending</option>
+                                <option value="4">Approved</option>
+                                <option value="5">Completed</option>
+                            </select>
+                                <span class="input-group-btn">
+                                <button class="btn btn-info"
+                                        ng-disabled="isLoading()"
+                                        ng-click="saveApplication()">
+                                    <i class="fa fa-save" ng-hide="isSaved() || isLoaded()"></i>
+                                    <i class="fa fa-check-circle" ng-show="isSaved() && !isLoaded()"></i>
+                                    <i class="fa fa-spin fa-spinner" ng-show="isLoaded() && !isSaved()"></i>
+                                </button>
+                               </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top:50px">
+                        <label class="col-xs-5 text-right">IINC Number</label>
+                        <div class="col-xs-7">
+                            <div class="input-group">
+                                <input type="text" ng-model="application.IINC" ng-limitiinc class="form-control" placeholder="IINC Number" />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-info"
+                                            ng-disabled="isLoading()"
+                                            ng-click="saveApplication()">
+                                        <i class="fa fa-save" ng-hide="isSaved() || isLoaded()"></i>
+                                        <i class="fa fa-check-circle" ng-show="isSaved() && !isLoaded()"></i>
+                                        <i class="fa fa-spin fa-spinner" ng-show="isLoaded() && !isSaved()"></i>
+                                    </button>
+                               </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <h2>Mortage details</h2>
+            <table class="table table-bordered">
+                <tr>
+                    <td class="text-right"><strong>Purpose of Loan</strong></td>
+                    <td>{{application.get('MortagePurpose')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Purchase'">
+                    <td class="text-right"><strong>Purchase Price</strong></td>
+                    <td>{{application.get('MortagePurchaseNew')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Purchase'">
+                    <td class="text-right"><strong>Mortgage amount</strong></td>
+                    <td>{{application.get('PurchasePrice')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Purchase'">
+                    <td class="text-right"><strong>Insurance amount</strong></td>
+                    <td>${{application.get('MortageInsurance')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Purchase'">
+                    <td class="text-right"><strong>Down Payment</strong></td>
+                    <td>{{application.get('MortagePurchaseDownPayment')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Purchase'">
+                    <td class="text-right"><strong>Down Payment Percent</strong></td>
+                    <td>{{application.get('PurchaseDownPercent')*100}}%</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Purchase'">
+                    <td class="text-right"><strong>Was this home listed on MLS?</strong></td>
+                    <td>{{application.get('MortageMLS')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Purchase' && application.get('MortageMLS')!='N'">
+                    <td class="text-right"><strong>MLS Number</strong></td>
+                    <td>{{application.get('MortageMLSNumber')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Purchase'">
+                    <td class="text-right"><strong>Closing Date</strong></td>
+                    <td>{{application.get('ClosingDate')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Pre-Approval'">
+                    <td class="text-right"><strong>Purchase Price</strong></td>
+                    <td>{{application.get('MortagePurchaseNew')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Pre-Approval'">
+                    <td class="text-right"><strong>Mortgage amount</strong></td>
+                    <td>{{application.get('PurchasePrice')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Pre-Approval'">
+                    <td class="text-right"><strong>Insurance amount</strong></td>
+                    <td>${{application.get('MortageInsurance')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Pre-Approval'">
+                    <td class="text-right"><strong>Down Payment</strong></td>
+                    <td>{{application.get('MortagePurchaseDownPayment')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Pre-Approval'">
+                    <td class="text-right"><strong>Down Payment Percent</strong></td>
+                    <td>{{application.get('PurchaseDownPercent')*100}}%</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Pre-Approval' && application.get('MortageMLS')!='N'">
+                    <td class="text-right"><strong>Was this home listed on MLS?</strong></td>
+                    <td>{{application.get('MortageMLS')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Pre-Approval'">
+                    <td class="text-right"><strong>MLS Number</strong></td>
+                    <td>{{application.get('MortageMLSNumber')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Pre-Approval'">
+                    <td class="text-right"><strong>Closing Date</strong></td>
+                    <td>{{application.get('ClosingDate')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Refinance'">
+                    <td class="text-right"><strong>Appraised Value</strong></td>
+                    <td>{{application.get('AppraisedValue')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Refinance'">
+                    <td class="text-right"><strong>Existing Mortgage Amount</strong></td>
+                    <td>{{application.get('ExistingMortageValueRefinance')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Refinance'">
+                    <td class="text-right"><strong>New Mortgage Required</strong></td>
+                    <td>{{application.get('NewMortageValueRefinance')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Switch'">
+                    <td class="text-right"><strong>Appraised Value</strong></td>
+                    <td>{{application.get('AppraisedValue')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Switch'">
+                    <td class="text-right"><strong>Existing Mortgage Amount</strong></td>
+                    <td>{{application.get('ExistingMortageValue')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Switch'">
+                    <td class="text-right"><strong>Maturity Date</strong></td>
+                    <td>{{application.get('MaturityDate')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Construction Financing'">
+                    <td class="text-right"><strong>Purchase Price</strong></td>
+                    <td>{{application.get('PurchasePriceConstruction')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Construction Financing'">
+                    <td class="text-right"><strong>Do you have approved Permits?</strong></td>
+                    <td>{{application.get('ApprovedPermits')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Construction Financing'">
+                    <td class="text-right"><strong>Total found required</strong></td>
+                    <td>{{application.get('TotalFoundsRequired')}}</td>
+                </tr>
+                <tr ng-if="application.get('MortagePurpose')=='Construction Financing'">
+                    <td class="text-right"><strong>Counstruction budget</strong></td>
+                    <td>{{application.get('ConstructionBudget')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Mortgage Type</strong></td>
+                    <td>{{application.get('MortageType')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Mortgage Rate</strong></td>
+                    <td>{{application.get('MortageRate')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Term</strong></td>
+                    <td>{{application.get('MortageTerm')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Amortization</strong></td>
+                    <td>{{application.get('MortageAmortization')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Do you own additional properties</strong></td>
+                    <td>{{application.get('MortageOwnProperties')}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="page-break col-xs-12"></div>
+        <div class="col-xs-12">
+            <h2>Personal information 1</h2>
+            <table class="table table-bordered">
+                <tr>
+                    <td class="text-right"><strong>Name</strong></td>
+                    <td>{{application.get('Personal1Title')}}  {{application.get('Personal1Fname')}}  {{application.get('Personal1Lname')}}
+                        <span ng-if="application.has('Personal1Initial')">({{application.get('Personal1Initial')}})</span></td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Birthday</strong></td>
+                    <td>
+                        <span ng-if="application.has('Personal1BirthMonth') && application.has('Personal1BirthDay') && application.has('Personal1BirthYear')">
+                            {{application.get('Personal1BirthMonth')}}/{{application.get('Personal1BirthDay')}}/{{application.get('Personal1BirthYear')}}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>SIN</strong></td>
+                    <td>{{application.get('Personal1SIN')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Home phone</strong></td>
+                    <td> {{application.get('Personal1HomePhone')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Work phone</strong></td>
+                    <td>{{application.get('Personal1WorkPhone')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Email</strong></td>
+                    <td>{{application.get('Personal1Email')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Preferred method of communication</strong></td>
+                    <td>{{application.get('Personal1Communication')}}</td>
+                </tr>
+                <tr ng-if="application.has('Personal1CommunicationTime')">
+                    <td class="text-right"><strong>When would you like us to contact you?</strong></td>
+                    <td>{{application.get('Personal1CommunicationDays')}} {{application.get('Personal1CommunicationTime')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Address</strong></td>
+                    <td>{{application.get('Personal1Street1')}} {{application.get('Personal1Street2')}},  {{application.get('Personal1Postal')}}, {{application.get('Personal1City')}}  {{application.get('Personal1Province')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Residental status</strong></td>
+                    <td>{{application.get('Personal1ResidentalStatus')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Monthly Mortgage Payment</strong></td>
+                    <td>{{application.get('Personal1MonthlyMortgagePayment')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Monthly rent</strong></td>
+                    <td>{{application.get('Personal1MonthlyRent')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Name of Company</strong></td>
+                    <td>{{application.get('Personal1CompanyName')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Are you self employed</strong></td>
+                    <td>
+                        <span ng-if="application.get('Personal1SelfEmployed')=='Y'">Yes</span>
+                        <span ng-if="application.get('Personal1SelfEmployed')=='N'">No</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Annual Income</strong></td>
+                    <td>{{application.get('Personal1Income')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Other/Additional Income Source</strong></td>
+                    <td>{{application.get('Personal1IncomeOther')}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="page-break col-xs-12"></div>
+        <div class="col-xs-12"
+             ng-show="application.has('Personal2Fname')">
+            <h2>Personal information 2</h2>
+            <table class="table table-bordered">
+                <tr>
+                    <td class="text-right"><strong>Name</strong></td>
+                    <td>{{application.get('Personal2Title')}}  {{application.get('Personal2Fname')}}  {{application.get('Personal2Lname')}}
+                        <span ng-if="application.has('Personal2Initial')">({{application.get('Personal2Initial')}})</span></td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Birthday</strong></td>
+                    <td>{{application.get('Personal2BirthMonth')}}/{{application.get('Personal2BirthDay')}}/{{application.get('Personal2BirthYear')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>SIN</strong></td>
+                    <td>{{application.get('Personal2SIN')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Home phone</strong></td>
+                    <td>{{application.get('Personal2HomePhone')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Work phone</strong></td>
+                    <td>{{application.get('Personal2WorkPhone')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Email</strong></td>
+                    <td>{{application.get('Personal2Email')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Relationship to Primary Applicant</strong></td>
+                    <td>{{application.get('Personal2Relationship')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Address</strong></td>
+                    <td>{{application.get('Personal2Street1')}} {{application.get('Personal2Street2')}},  {{application.get('Personal2Postal')}}, {{application.get('Personal2City')}}  {{application.get('Personal2Province')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Residental status</strong></td>
+                    <td>{{application.get('Personal2ResidentalStatus')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Monthly rent</strong></td>
+                    <td>{{application.get('Personal2MonthlyRent')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Monthly Mortgage Payment</strong></td>
+                    <td>{{application.get('Personal2MonthlyMortgagePayment')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Name of Company</strong></td>
+                    <td>{{application.get('Personal2CompanyName')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Are you self employed</strong></td>
+                    <td>
+                        <span ng-if="application.get('Personal2SelfEmployed')=='01'">Yes</span>
+                        <span ng-if="application.get('Personal2SelfEmployed')=='02'">No</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Annual Income</strong></td>
+                    <td>{{application.get('Personal2Income')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Other/Additional Income Source</strong></td>
+                    <td>{{application.get('Personal2IncomeOther')}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="page-break col-xs-12"></div>
+        <div class="col-xs-12">
+            <h2>Property Information</h2>
+            <table class="table table-bordered">
+                <tr>
+                    <td class="text-right"><strong>Address</strong></td>
+                    <td>{{application.get('PropertyStreet1')}} {{application.get('PropertyStreet2')}}, {{application.get('PropertyPostal')}}  {{application.get('PropertyCity')}}
+                        {{application.get('PropertyProvince')}} {{application.get('PropertyPostal')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Property Type</strong></td>
+                    <td>{{application.get('PropertyType')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Liveable Area</strong></td>
+                    <td>{{application.get('PropertyLivingArea')}} {{application.get('PropertyLivingAreaUnit')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Dwelling Style</strong></td>
+                    <td>{{application.get('PropertyDwellingStyle')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Garage</strong></td>
+                    <td>{{application.get('PropertyGarageType')}} <span ng-if="application.has('PropertyGarageSize')">({{application.get('PropertyGarageSize')}})</span></td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Occupied By</strong></td>
+                    <td>{{application.get('PropertyOccupiedBy')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>More about property</strong></td>
+                    <td>{{application.get('PropertyMore')}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="page-break col-xs-12"></div>
+        <div class="col-xs-12"
+             ng-if="application.get('MortagePurpose')!='Refinance'">
+            <h2>Assets</h2>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Where</th>
+                    <th>Description</th>
+                    <th>Value</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="(key,vala) in assets track by $index">
+                <tr ng-repeat="vals in vala track by $index"
+                    ng-if="vals.where!='' && vals.description!='' && vals.val!=''">
+                    <td><strong>{{key}}</strong></td>
+                    <td>{{vals.where}}</td>
+                    <td>{{vals.description}}</td>
+                    <td class="text-right">{{vals.val}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="page-break col-xs-12"></div>
+        <!--<div class="col-xs-12">-->
+            <!--<h2>Liabilities</h2>-->
+            <!--<table class="table table-bordered">-->
+                <!--<thead>-->
+                <!--<tr>-->
+                    <!--<th>#</th>-->
+                    <!--<th>Where</th>-->
+                    <!--<th>Description</th>-->
+                    <!--<th>Balance</th>-->
+                <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody ng-repeat="(key,vala) in liabilities track by $index">-->
+                <!--<tr ng-repeat="vals in vala track by $index"-->
+                    <!--ng-if="vals.where!='' && vals.description!='' && vals.balance!='' && vals.val!=''">-->
+                    <!--<td><strong>{{key}}</strong></td>-->
+                    <!--<td>{{vals.where}}</td>-->
+                    <!--<td>{{vals.description}}</td>-->
+                    <!--<td class="text-right">{{vals.balance}}</td>-->
+                <!--</tr>-->
+                <!--</tbody>-->
+            <!--</table>-->
+        <!--</div>-->
+        <div class="page-break col-xs-12"></div>
+        <div class="col-xs-12"
+             ng-if="application.has('Solicitor') || application.has('SolicitorPhone') || application.has('SolicitorEmail')">
+            <h2>Other</h2>
+            <table class="table table-bordered">
+                <tr>
+                    <td class="text-right"><strong>Solicitor Name</strong></td>
+                    <td>{{application.get('Solicitor')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Solicitor Phone</strong></td>
+                    <td>{{application.get('SolicitorPhone')}}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Solicitor Email</strong></td>
+                    <td>{{application.get('SolicitorEmail')}}</td>
+                </tr>
+            </table>
+        </div>
+        </div>
+</div>

@@ -1,0 +1,121 @@
+<div class="header-contact-us">
+    <div class="container-fluid contact-form">
+        <div class="row" id="cntcUsR1">
+            <div class="col-xs-12 text-center">
+                <h1 class="aleoFont cntcUsHeader1">
+                    Contact Us
+                </h1>
+            </div>
+        </div>
+        <div class="row contact-row" id="cntcUsR2">
+        	<div class="inner-contact-row">
+            <div class="container-fluid" id="formContainer">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 padding0">
+                        <div class="formDiv table">
+                                <form role="form" name="contactForm" ng-controller="ContactUsController" ng-submit="sendContact(contactForm)">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <h3 class="form-header">Leave a Message</h3>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="name">Name</label>
+                                                    <input type="input" class="form-control" id="name"
+                                                           placeholder="Enter name" ng-model="user.name"
+                                                           name="uName" ng-required="true"
+                                                           ng-minlength="6">
+                                                    <div class="invalid-input" ng-show="myForm.uName.$dirty && myForm.uName.$error.minlength">minimum length 6 letters.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="email">E-mail</label>
+
+                                                    <input type="email" class="form-control" id="email"
+                                                           placeholder="Enter email" ng-model="user.email"
+                                                           name="uEmail" ng-required="true">
+                                                    <div class="invalid-input" ng-show="myForm.uEmail.$dirty && myForm.uEmail.$invalid">Invalid Email.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="text">Message</label>
+                                                    <textarea rows="6" class="form-control" id="text"
+                                                              placeholder="Enter Message" ng-required="true"
+                                                              ng-model="user.txt" name="uText" ng-minlength="6">
+                                                    </textarea>
+                                                    <div class="invalid-input" ng-show="myForm.utxt.$dirty && myForm.utxt.$error.minlength">minimum length 6 letters.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-bottom: 30px">
+                                            <div class="col-md-12">
+                                                <div class="chk-box-div">
+
+                                                    <div ng-show="!chkBox">
+                                                        <input type="checkbox" name="sendMeACopy" id="chkBox" style="margin-top: 8px" ng-model="chkBox" style="margin-top: 8px">
+                                                    </div>
+
+                                                    <div ng-show="chkBox" ng-click="chkBox = !chkBox">
+                                                        <img ng-src="resources/img/send_me_copy.png" width="15px" height="15px">
+                                                    </div>
+
+                                                </div>
+                                                <label>&nbsp;Send me a copy</label>
+                                                <button type="submit" class="btn btn-success btn-lg mar-xs-top pull-right ng-click-active"
+                                                        id="sendBtn" ng-click="" ng-disabled="myForm.$invalid">
+                                                    <span class="margin-top-small">Send</span>
+                                                </button>
+                                                <p class="text-success">Your message has been sent successfully.</p>
+                                                <p class="text-warning">There has been an error sending your email.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 padding0">
+                        <div id="getInTouch">
+							<h3> Get in touch</h3>
+							<div class="dspTbl">
+								<span class="glyphicon glyphicon-map-marker pull-left blckS"></span>
+								<p class="blckP">
+									Do Your Own Mortgage <br>
+									2914 Dufferin Street <br>
+									Toronto, ON, M6B 3S8
+								</p>
+							</div>
+							<hr class="hrAdjust">
+							<div  class="dspTbl">
+								<span class="glyphicon glyphicon-earphone pull-left blckS"></span>
+								<p class="blckP" >
+									1 800 298-3966
+								</p>
+							</div>
+							<hr class="hrAdjust">
+							<div  class="dspTbl">
+								<span class="glyphicon glyphicon-envelope pull-left blckS"></span>
+								<a class="blckP" href="mailto:info@doyourownmortgage.com">
+									info@doyourownmortgage.com
+								</a>
+							</div>
+							<hr class="hrAdjust">
+							<div  class="dspTbl">
+								<span class="glyphicon glyphicon-map-marker pull-left blckS"></span>
+								<a class="blckP" href="#">
+									@doyourownmortgage
+								</a>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

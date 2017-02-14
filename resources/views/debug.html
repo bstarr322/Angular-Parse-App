@@ -1,0 +1,11 @@
+<div class="container padding-top">
+	<h1>Debug - Run Parse commands</h1>
+	<!-- Add the user associated with the specified email to role (making them an admin) -->
+	<form role="form" name="adminForm" ng-controller="DebugCtrl" ng-submit="createAdmin(adminForm)">	
+		<label for="email">Email:</label>
+		<input type="input" name="email" placeholder="Enter email" ng-model="user.email" class="form-control">
+		<button type="submit" class="btn btn-success">
+			<span class="margin-top-small">Add User to Admin Role</span>
+		</button>
+	</form>
+</div>
